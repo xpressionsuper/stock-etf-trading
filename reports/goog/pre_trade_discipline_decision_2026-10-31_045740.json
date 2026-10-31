@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-31T04:57:40.510802+00:00",
+  "as_of": "2026-10-31T23:59:59.999999-04:00",
+  "overall_decision": "GO",
+  "candidate_results": [
+    {
+      "symbol": "GOOG",
+      "thesis_id": "th_goog_rev_20261031_6194",
+      "order_intent": "ENTRY_READY",
+      "actionable": true,
+      "decision": "GO",
+      "reasons": [],
+      "checklist_answers": {
+        "entry_in_written_plan": true,
+        "stop_predefined": true,
+        "size_within_plan": true,
+        "planned_risk_dollars": 999,
+        "actual_risk_dollars": 999,
+        "notes": "Conditional buy-stop 287.00 x54, stop 268.50. Paper."
+      },
+      "link_status": "linked"
+    }
+  ],
+  "metrics": {
+    "candidates_total": 1,
+    "actionable_candidates": 1,
+    "theses_scanned": 1,
+    "revenge_window_hours": 24.0
+  },
+  "inputs": {
+    "state_dir": "state\\theses",
+    "market_regime_decision": "reports\\goog\\market_regime_decision_2026-10-31.json",
+    "circuit_breaker_decision": "reports\\goog\\circuit_breaker_decision_2026-10-31_045719.json"
+  },
+  "artifact_paths": {
+    "json": "reports\\goog\\pre_trade_discipline_decision_2026-10-31_045740.json",
+    "markdown": "reports\\goog\\pre_trade_discipline_decision_2026-10-31_045740.md",
+    "journal": "state\\journal\\pre_trade_discipline_2026-10-31.jsonl"
+  },
+  "warnings": [],
+  "rationale": "All actionable manual-order candidates passed the pre-trade discipline gate."
+}

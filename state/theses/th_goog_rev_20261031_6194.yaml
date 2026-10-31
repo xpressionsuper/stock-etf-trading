@@ -1,0 +1,92 @@
+thesis_id: th_goog_rev_20261031_6194
+ticker: GOOG
+created_at: '2026-10-31T04:57:29+00:00'
+updated_at: '2026-10-31T05:21:15+00:00'
+thesis_type: mean_reversion
+setup_type: earnings_gap_down_support_reclaim
+catalyst: null
+status: ENTRY_READY
+status_history:
+- status: IDEA
+  at: '2026-10-31T04:57:29+00:00'
+  reason: manually entered
+- status: ENTRY_READY
+  at: '2026-10-31T04:57:46+00:00'
+  reason: Gate GO; conditional buy-stop 287 resting until 2026-11-13
+thesis_statement: 'H-001: GOOG holds 271-276 triple-bottom support after -12% Q3 earnings
+  gap; buy-stop 287.00 above 10/29 gap-day high, stop 268.50, targets 314/320. Cancel
+  if not triggered by 2026-11-13 or daily close < 270.'
+mechanism_tag: null
+evidence: []
+kill_criteria: []
+confidence: null
+confidence_score: null
+origin_fingerprint: e85852dcdfd3a0a5
+entry:
+  target_price: null
+  conditions: []
+  actual_price: null
+  actual_date: null
+exit:
+  stop_loss: 268.5
+  stop_loss_pct: null
+  take_profit: 314
+  take_profit_rr: null
+  time_stop_days: null
+  actual_price: null
+  actual_date: null
+  exit_reason: null
+position:
+  shares: 54
+  shares_remaining: 54
+  position_value: 15498.0
+  risk_dollars: 999.0
+  risk_pct_of_account: 1.0
+  account_type: null
+  sizing_method: fixed_fractional
+  raw_source:
+    skill: position-sizer
+    file: reports/goog/position_sizer_2026-10-31_135719.json
+    fields:
+      final_recommended_shares: 54
+      final_position_value: 15498.0
+      final_risk_dollars: 999.0
+market_context: null
+monitoring:
+  review_interval_days: 30
+  next_review_date: '2026-11-30'
+  last_review_date: null
+  review_status: OK
+  triggers_config: []
+  alerts: []
+origin:
+  skill: manual
+  output_file: C:/Users/xpres/AppData/Local/Temp/claude/c--Users-xpres-OneDrive----stock-etf-trading/f60cbbf5-04e6-4292-a0c7-e9256970d8d0/scratchpad/manual.json
+  screening_grade: null
+  screening_score: null
+  raw_provenance:
+    ticker: GOOG
+    thesis_type: mean_reversion
+    setup_type: earnings_gap_down_support_reclaim
+    thesis_statement: 'H-001: GOOG holds 271-276 triple-bottom support after -12%
+      Q3 earnings gap; buy-stop 287.00 above 10/29 gap-day high, stop 268.50, targets
+      314/320. Cancel if not triggered by 2026-11-13 or daily close < 270.'
+    stop_loss: 268.5
+    target_price: 314
+    notes: 'Paper trade. Macro Transitional 46.8. Data: yfinance (FMP free blocks
+      GOOG).'
+linked_reports:
+- skill: pre-trade-discipline-gate
+  file: reports\goog\pre_trade_discipline_decision_2026-10-31_045740.json
+  date: '2026-10-31'
+- skill: pre-trade-discipline-gate
+  file: C:\Users\xpres\AppData\Local\Temp\claude\c--Users-xpres-OneDrive----stock-etf-trading\f60cbbf5-04e6-4292-a0c7-e9256970d8d0\scratchpad\smoke\pre_trade_discipline_decision_2026-10-31_052115.json
+  date: '2026-10-31'
+outcome:
+  pnl_dollars: null
+  pnl_pct: null
+  holding_days: null
+  mae_pct: null
+  mfe_pct: null
+  mae_mfe_source: null
+  lessons_learned: null

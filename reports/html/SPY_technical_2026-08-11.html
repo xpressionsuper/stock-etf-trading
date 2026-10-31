@@ -1,0 +1,356 @@
+<!doctype html>
+<title>SPY 기술적 분석 — 2026-08-11</title>
+<meta name="description" content="SPY 일봉 장기 차트 기술적 분석: 지지/저항, 시나리오, 매수/매도/홀딩 대응책">
+<style>
+@font-face {
+  font-family: 'Spline Sans';
+  src: local('Arial');
+}
+
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eceef2;
+  --border: #d7dbe2;
+  --ink: #171b24;
+  --ink-dim: #565f70;
+  --ink-faint: #8a92a3;
+  --accent: #0e6e5c;
+  --accent-soft: #dcf1ea;
+  --bull: #0e8f6f;
+  --bull-soft: #e2f5ee;
+  --bear: #c23b3b;
+  --bear-soft: #fbe6e6;
+  --warn: #b8790f;
+  --warn-soft: #fbeed9;
+  --font-display: 'Spline Sans', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Iowan Old Style', 'Georgia', 'Noto Serif KR', serif;
+  --font-mono: 'SF Mono', 'Consolas', 'D2Coding', monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d1117;
+    --surface: #151b23;
+    --surface-2: #1c2430;
+    --border: #2a3342;
+    --ink: #e8ecf2;
+    --ink-dim: #a2acbd;
+    --ink-faint: #6b7688;
+    --accent: #3ecfa3;
+    --accent-soft: #123227;
+    --bull: #3ecfa3;
+    --bull-soft: #10281f;
+    --bear: #ef6a6a;
+    --bear-soft: #2e1414;
+    --warn: #e0af51;
+    --warn-soft: #302109;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #0d1117;
+  --surface: #151b23;
+  --surface-2: #1c2430;
+  --border: #2a3342;
+  --ink: #e8ecf2;
+  --ink-dim: #a2acbd;
+  --ink-faint: #6b7688;
+  --accent: #3ecfa3;
+  --accent-soft: #123227;
+  --bull: #3ecfa3;
+  --bull-soft: #10281f;
+  --bear: #ef6a6a;
+  --bear-soft: #2e1414;
+  --warn: #e0af51;
+  --warn-soft: #302109;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  padding: 0 0 5rem;
+}
+
+.wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 0;
+}
+
+header.hero {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.75rem;
+  margin-bottom: 2.25rem;
+}
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 700;
+  margin: 0 0 0.5rem;
+  text-wrap: balance;
+  letter-spacing: -0.01em;
+}
+
+.subhead {
+  color: var(--ink-dim);
+  font-size: 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.hero-stat .label {
+  font-family: var(--font-display);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.2rem;
+}
+
+.hero-stat .value {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.hero-stat .value.bear { color: var(--bear); }
+.hero-stat .value.bull { color: var(--bull); }
+
+section { margin-bottom: 2.5rem; }
+
+h2 {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+h2 .num {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 0.9rem;
+}
+
+p { margin: 0 0 0.9rem; color: var(--ink); }
+p.note { color: var(--ink-dim); font-size: 0.95rem; }
+
+.callout {
+  background: var(--warn-soft);
+  border: 1px solid color-mix(in srgb, var(--warn) 35%, transparent);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  font-size: 0.92rem;
+  color: var(--ink);
+  font-family: var(--font-display);
+  line-height: 1.55;
+}
+.callout strong { color: var(--warn); }
+
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; font-family: var(--font-display); font-size: 0.88rem; min-width: 480px; }
+th, td { text-align: left; padding: 0.65rem 0.9rem; border-bottom: 1px solid var(--border); }
+th { background: var(--surface-2); color: var(--ink-dim); font-weight: 600; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; }
+tr:last-child td { border-bottom: none; }
+td.num, th.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; text-align: right; }
+tr.res td:first-child { color: var(--bear); font-weight: 600; }
+tr.sup td:first-child { color: var(--bull); font-weight: 600; }
+tr.cur td { background: var(--accent-soft); font-weight: 700; }
+
+.scenarios { display: grid; gap: 1rem; }
+.scenario {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 6px;
+  padding: 1.1rem 1.3rem;
+}
+.scenario.bull { border-left-color: var(--bull); }
+.scenario.bear { border-left-color: var(--bear); }
+.scenario-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.scenario-head h3 { font-family: var(--font-display); font-size: 1rem; margin: 0; }
+.prob { font-family: var(--font-mono); font-weight: 700; font-size: 1rem; color: var(--accent); }
+.scenario.bull .prob { color: var(--bull); }
+.scenario.bear .prob { color: var(--bear); }
+.scenario dl { margin: 0.6rem 0 0; display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 0.8rem; font-size: 0.9rem; }
+.scenario dt { color: var(--ink-faint); font-family: var(--font-display); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.05em; padding-top: 0.15rem; }
+.scenario dd { margin: 0; color: var(--ink); }
+
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 640px) { .action-grid { grid-template-columns: 1fr; } }
+.action-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.1rem 1.3rem;
+}
+.action-card h3 {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0 0 0.6rem;
+  color: var(--ink-dim);
+}
+.action-card ul { margin: 0; padding-left: 1.1rem; }
+.action-card li { margin-bottom: 0.45rem; }
+
+.badge {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.15rem 0.55rem;
+  border-radius: 4px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  letter-spacing: 0.03em;
+}
+
+footer {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  color: var(--ink-faint);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+  margin-top: 1rem;
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Technical Analysis · Lightweight Workflow</p>
+    <h1>SPY (SPDR S&amp;P 500 ETF Trust) — 일봉 장기 추세 분석</h1>
+    <p class="subhead">NYSE Arca · 2026-08-11 기준 · 사용자 제공 차트 이미지 기반 · 페이퍼 트레이딩 참고용</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="label">현재가 (차트 표시)</div><div class="value bear">772.90</div></div>
+      <div class="hero-stat"><div class="label">최근 스윙 고점(추정)</div><div class="value">~800</div></div>
+      <div class="hero-stat"><div class="label">매크로 국면</div><div class="value bull">Broadening</div></div>
+      <div class="hero-stat"><div class="label">1차 지지(추정)</div><div class="value">~740</div></div>
+    </div>
+  </header>
+
+  <section>
+    <h2><span class="num">01</span>매크로 국면 (macro-regime-detector)</h2>
+    <p>6개 크로스에셋 지표 종합 결과, 현재 국면은 <strong>Broadening(시장 확산)</strong>으로 판정되었다 (신뢰도 High, 전환확률 70–90%, 컴포지트 60.8/100). RSP/SPY 골든크로스가 확인되며 중소형주·경기순환주 참여가 늘고 있고, 신용스프레드(HYG/LQD)도 완화되는 중이다. 다만 섹터 로테이션(XLY/XLP)은 방어주 선호로 약한 역행 신호를 보이고, 등락폭 지표(SPY/TLT)는 여전히 정(+) 상관 — 인플레이션 헤지 실패 국면 특징도 일부 혼재한다.</p>
+    <p class="note">SPY 자체는 시가총액가중지수라 확산 국면의 최대 수혜주는 아니다. 국면상 RSP·IWM·경기순환 섹터의 상대 강도가 SPY보다 높을 가능성이 크다는 점을 참고할 것.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span>차트 데이터 신뢰도 참고사항</h2>
+    <div class="callout">
+      <strong>확신도 저하 요인:</strong> 제공된 스크린샷에서 이동평균선 범례값(MA20 close 437.76, 80EMA 435.72/452.30/419.13)이 현재가(772.90)와 스케일이 맞지 않는다 — 차트가 과거 시점 값을 갱신하지 않은 채로 캡처된 것으로 보인다. 따라서 정확한 이동평균 수치는 이 캡처만으로 신뢰할 수 없고, 아래 지지/저항 레벨은 캔들 스윙 구조를 눈으로 읽은 <strong>근사치</strong>이며 거래량 세부 데이터도 확인 불가하다.
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span>추세 및 구조</h2>
+    <p>수년에 걸친 <strong>1차 상승추세</strong>가 유지되고 있으며, 그 사이 두 차례의 굵직한 조정을 지나왔다: 중반부의 완만하고 긴 하락(2022년형 약세장 패턴 추정)과, 우측 근접부의 급격한 V자형 폭락·급반등(단기 크래시 후 강한 되돌림)이다. 이 V자 반등 이후 가격은 거의 수직에 가깝게 신고가(~800 부근)까지 밀어올렸고, 현재는 그 고점에서 되돌림이 진행 중인 상태(772.90)다. 단기간 낙폭 대비 반등폭이 매우 컸다는 점에서 <strong>단기 과열(post-parabolic exhaustion)</strong> 신호로 해석할 수 있다.</p>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span>지지 / 저항 레벨 (추정)</h2>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>레벨</th><th>구간</th><th class="num">근사 가격</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr class="res"><td>저항 2</td><td>스윙 고점</td><td class="num">~800</td><td>되돌림 시작점, 신고가 저항</td></tr>
+          <tr class="cur"><td>현재가</td><td>—</td><td class="num">772.90</td><td>고점 대비 약 -3.5% 조정 중</td></tr>
+          <tr class="sup"><td>지지 1</td><td>이전 돌파 구간</td><td class="num">~740</td><td>급등 시작 전 저항이었던 지지 전환 구간, 1차 방어선</td></tr>
+          <tr class="sup"><td>지지 2</td><td>V자 저점 / 갭 구간</td><td class="num">~640–680</td><td>급락 저점 및 되돌림 시작 구간, 심리적/구조적 지지대</td></tr>
+          <tr class="sup"><td>지지 3</td><td>이전 박스권 상단</td><td class="num">~560–600</td><td>중반부 조정 국면의 상단 저항이었던 구간</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">05</span>시나리오</h2>
+    <div class="scenarios">
+      <div class="scenario">
+        <div class="scenario-head"><h3>베이스 케이스 — 건전한 눌림 후 재상승</h3><span class="prob">50%</span></div>
+        <dl>
+          <dt>내용</dt><dd>급등 이후 자연스러운 되돌림이 ~740 지지대 부근에서 마무리되고, 매크로 확산 국면의 완화적 신용 여건을 배경으로 재차 800 돌파를 시도.</dd>
+          <dt>근거</dt><dd>1차 상승추세 유지, 신용스프레드 완화, 되돌림 폭이 아직 완만(-3.5%)</dd>
+          <dt>목표</dt><dd>800 재돌파 → 신고가 갱신</dd>
+          <dt>무효화</dt><dd>일봉 종가 기준 740 이탈</dd>
+        </dl>
+      </div>
+      <div class="scenario bull">
+        <div class="scenario-head"><h3>불 케이스 — 즉각 반등, 추세 가속</h3><span class="prob">25%</span></div>
+        <dl>
+          <dt>내용</dt><dd>현재 레벨(772 부근)에서 바로 지지받아 반등, 짧은 조정만으로 800 저항을 돌파.</dd>
+          <dt>근거</dt><dd>강한 모멘텀, 확산 국면 진입 초기 국면의 위험선호</dd>
+          <dt>목표</dt><dd>800 상단 돌파 후 추세 연장</dd>
+          <dt>무효화</dt><dd>수 주 내 800 재돌파 실패 후 750 이하로 밀림</dd>
+        </dl>
+      </div>
+      <div class="scenario bear">
+        <div class="scenario-head"><h3>베어 케이스 — 심화 조정</h3><span class="prob">25%</span></div>
+        <dl>
+          <dt>내용</dt><dd>단기 과열 해소 과정에서 740 지지가 무너지고 급락 저점~갭 구간(~640–680)까지 되돌림 심화.</dd>
+          <dt>근거</dt><dd>직전 상승이 지나치게 수직적(parabolic)이었던 만큼 되돌림 폭도 클 수 있음, 섹터 로테이션이 방어주 쪽으로 약하게 기울어 있음</dd>
+          <dt>목표</dt><dd>640–680 구간 재테스트</dd>
+          <dt>확인</dt><dd>일봉 종가 기준 740 이탈 확정 시</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">06</span>매수 / 매도 / 홀딩 대응책 <span class="badge">페이퍼 트레이딩</span></h2>
+    <div class="action-grid">
+      <div class="action-card">
+        <h3>보유자 (Holding)</h3>
+        <ul>
+          <li>1차 상승추세가 아직 훼손되지 않았으므로 패닉 매도 불필요.</li>
+          <li>~740 종가 이탈 여부를 핵심 방어선으로 감시.</li>
+          <li>확산 국면 특성상 SPY 신규 비중 확대보다는 RSP/IWM 등 확산 수혜 자산으로 일부 리밸런싱 고려.</li>
+        </ul>
+      </div>
+      <div class="action-card">
+        <h3>미보유자 (신규 진입 검토)</h3>
+        <ul>
+          <li>고점 대비 수직 급등 직후 현재가 추격 매수는 리스크/보상 비율이 좋지 않음.</li>
+          <li>740–760 구간 되돌림 또는 확정된 바닥 패턴 형성을 기다리는 편이 유리.</li>
+          <li>실제 진입 검토 시에는 trade-hypothesis-ideator → position-sizer → pre-trade-discipline-gate 전체 루프로 전환할 것.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">07</span>요약</h2>
+    <p>SPY는 장기 상승추세 안에서 급격한 V자 반등 후 고점(~800)에서 되돌림 중이며, 현재가는 772.90이다. 매크로 국면은 Broadening으로 우호적이나 SPY 자체보다 확산 수혜 자산의 상대강도가 더 클 가능성이 있다. 보유자는 ~740 지지를 기준으로 홀딩, 미보유자는 되돌림을 기다리는 전략이 합리적이다. 단, 본 분석은 이동평균 범례값이 스케일 불일치를 보인 스크린샷에 기반하므로 정밀한 진입/청산 트레이딩에는 실시간 데이터 재확인이 필요하다.</p>
+  </section>
+
+  <footer>
+    페이퍼 트레이딩 연습 목적의 참고 자료이며 투자 권유가 아닙니다 · 매크로 리포트: reports/macro_regime_2026-08-11_225731.md
+  </footer>
+</div>

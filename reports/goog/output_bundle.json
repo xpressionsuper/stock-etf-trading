@@ -1,0 +1,186 @@
+{
+  "generated_at_utc": "2026-10-31T04:57:18Z",
+  "summary": "Top hypothesis: H-001 (Triple-bottom hold + gap-day-high reclaim long) with priority score 3.6.",
+  "state_assessment": "Ranked hypotheses validated against guardrails.",
+  "hypotheses": [
+    {
+      "hypothesis_id": "H-001",
+      "title": "Triple-bottom hold + gap-day-high reclaim long",
+      "thesis": "If GOOG holds the 271-276 multi-month support and closes above the 10/29 gap-day high (286.43), sellers are exhausted and price retraces toward the 314-320 gap zone.",
+      "problem_target": "Avoid buying the falling knife while still capturing the oversold reversal",
+      "mechanism": "RSI14 13 + 5x volume capitulation into a level that held twice (Nov-2025, Mar-2026); reclaim of gap-day high traps late shorts.",
+      "evidence_basis": [
+        "Support 271.4/271.5 held twice in 12 months",
+        "RSI14 13.3 extreme oversold",
+        "Gap-day volume 93M vs 19M 50d avg"
+      ],
+      "proposed_rule_changes": [
+        {
+          "component": "entry_logic",
+          "change": "Buy-stop 287.00 (above 286.43 gap-day high), valid 10 sessions"
+        },
+        {
+          "component": "exit_logic",
+          "change": "Stop 268.50 (below triple-bottom 271.4); T1 314, T2 320"
+        }
+      ],
+      "expected_impact": "R:R ~1.5-1.8 to gap zone with defined invalidation",
+      "key_risks": [
+        "Negative PEAD can grind lower for weeks",
+        "Transitional macro with risk-off rotation",
+        "Gap-fill zone 314-320 is heavy overhead supply"
+      ],
+      "kill_criteria": [
+        "Daily close below 270 (support broken) -> cancel/stop",
+        "No trigger within 10 sessions (by 2026-11-13) -> cancel order",
+        "Weekly close below 271 -> thesis invalid, revert to IDEA/park"
+      ],
+      "minimum_viable_experiment": {
+        "goal": "Paper-trade single instance",
+        "setup": "Resting buy-stop 287.00, stop 268.50",
+        "metrics": [
+          "R multiple",
+          "MAE/MFE"
+        ],
+        "sample_size": "1 trade (journal)",
+        "duration": "2-6 weeks"
+      },
+      "score_components": {
+        "evidence_strength": 3,
+        "mechanism_clarity": 4,
+        "feasibility": 5,
+        "expected_payoff": 3,
+        "novelty": 2,
+        "test_efficiency": 4
+      },
+      "priority_score": 3.6,
+      "recommendation": "pursue",
+      "rationale": "Clear invalidation level, waits for confirmation instead of guessing the bottom.",
+      "confidence": "medium-low",
+      "assumptions": [
+        "271 support remains respected"
+      ],
+      "dependencies": [
+        "Daily close data"
+      ]
+    },
+    {
+      "hypothesis_id": "H-002",
+      "title": "Buy the support now at ~278",
+      "thesis": "Extreme oversold at support justifies immediate entry.",
+      "problem_target": "Best price capture",
+      "mechanism": "Mean reversion from RSI<15",
+      "evidence_basis": [
+        "RSI14 13.3"
+      ],
+      "proposed_rule_changes": [
+        {
+          "component": "entry_logic",
+          "change": "Market buy ~278, stop 268.50"
+        }
+      ],
+      "expected_impact": "Better R:R if it works",
+      "key_risks": [
+        "No reversal confirmation; price still making lower lows 10/30",
+        "Post-earnings drift"
+      ],
+      "kill_criteria": [
+        "Close below 270"
+      ],
+      "minimum_viable_experiment": {
+        "goal": "n/a",
+        "setup": "n/a",
+        "metrics": [
+          "R"
+        ],
+        "sample_size": "1",
+        "duration": "2 weeks"
+      },
+      "score_components": {
+        "evidence_strength": 2,
+        "mechanism_clarity": 2,
+        "feasibility": 5,
+        "expected_payoff": 3,
+        "novelty": 1,
+        "test_efficiency": 3
+      },
+      "priority_score": 2.75,
+      "recommendation": "reject",
+      "rationale": "No confirmation; catches the falling knife the strategy aims to avoid.",
+      "confidence": "low",
+      "assumptions": [],
+      "dependencies": []
+    },
+    {
+      "hypothesis_id": "H-003",
+      "title": "Post-earnings negative drift continuation",
+      "thesis": "Large gap-down on 5x volume below all MAs tends to drift lower for weeks.",
+      "problem_target": "Direction bias",
+      "mechanism": "PEAD; institutional de-risking after capex guidance",
+      "evidence_basis": [
+        "Gap below 200DMA on record volume"
+      ],
+      "proposed_rule_changes": [
+        {
+          "component": "filter",
+          "change": "No long unless H-001 trigger fires"
+        }
+      ],
+      "expected_impact": "Avoid losses",
+      "key_risks": [
+        "Short squeeze from oversold"
+      ],
+      "kill_criteria": [
+        "Close above 287"
+      ],
+      "minimum_viable_experiment": {
+        "goal": "Watch",
+        "setup": "Watchlist",
+        "metrics": [
+          "close vs 271"
+        ],
+        "sample_size": "1",
+        "duration": "2 weeks"
+      },
+      "score_components": {
+        "evidence_strength": 3,
+        "mechanism_clarity": 4,
+        "feasibility": 1,
+        "expected_payoff": 2,
+        "novelty": 2,
+        "test_efficiency": 3
+      },
+      "priority_score": 2.55,
+      "recommendation": "park",
+      "rationale": "Account is long-only; used as the bearish filter for H-001.",
+      "confidence": "medium",
+      "assumptions": [],
+      "dependencies": []
+    }
+  ],
+  "selected_next_actions": [
+    "Run MVE: Paper-trade single instance"
+  ],
+  "warnings": [],
+  "logging_payload": {
+    "objective": "GOOG post-earnings gap-down: decide whether a support-reversal long is tradable",
+    "sources_used": [
+      "strategy_context",
+      "constraints",
+      "market_context",
+      "performance_summary",
+      "trade_log_summary",
+      "feature_inventory",
+      "qualitative_notes"
+    ],
+    "hypothesis_ids": [
+      "H-001",
+      "H-002",
+      "H-003"
+    ],
+    "selected_next_actions": [
+      "Run MVE: Paper-trade single instance"
+    ],
+    "warnings": []
+  }
+}

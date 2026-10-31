@@ -1,0 +1,399 @@
+<title>GOOG 실적 갭다운 점검</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 레이아웃: 어두운 '장 마감 후' 히어로 밴드에 주석 차트를 크게 깔고, 아래는 근거 → 실행 → 점검 순서의 리서치 노트 */
+:root{
+  --bg:#eef1f5; --surface:#ffffff; --sunk:#e4e9f0; --ink:#0f1a2a; --muted:#536075; --line:#d3dae4;
+  --accent:#1f4f8a; --good:#137044; --bad:#b8352a; --warn:#9a5f0c;
+  --good-t:rgba(19,112,68,.13); --bad-t:rgba(184,53,42,.11); --accent-t:rgba(31,79,138,.10);
+  /* 히어로는 두 테마 모두 '야간 시장' 톤으로 고정 */
+  --h-bg:#0c1522; --h-bg2:#13233a; --h-fg:#eef2f8; --h-muted:#9aa8bd; --h-line:rgba(154,168,189,.18);
+  --h-good:#5fd39a; --h-bad:#ff8b7b; --h-warn:#f2b45a; --h-accent:#8fbaf3;
+  --display:"Nanum Myeongjo","Batang",serif;
+  --sans:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a0f17; --surface:#111a26; --sunk:#0d1520; --ink:#e7ecf3; --muted:#95a2b6; --line:#223042;
+  --accent:#86b2ee; --good:#55c98d; --bad:#f2806f; --warn:#e9ad52;
+  --good-t:rgba(85,201,141,.15); --bad-t:rgba(242,128,111,.14); --accent-t:rgba(134,178,238,.12);
+  --h-bg:#070c14; --h-bg2:#0f1c2f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a0f17; --surface:#111a26; --sunk:#0d1520; --ink:#e7ecf3; --muted:#95a2b6; --line:#223042;
+  --accent:#86b2ee; --good:#55c98d; --bad:#f2806f; --warn:#e9ad52;
+  --good-t:rgba(85,201,141,.15); --bad-t:rgba(242,128,111,.14); --accent-t:rgba(134,178,238,.12);
+  --h-bg:#070c14; --h-bg2:#0f1c2f; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+::selection{background:var(--accent);color:var(--surface)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.num,td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.in{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- 히어로 ---------- */
+.hero{background:radial-gradient(120% 90% at 85% 0%,var(--h-bg2),var(--h-bg) 60%);color:var(--h-fg)}
+.hero .in{padding-block:44px 28px;display:grid;gap:26px}
+.hero-top{display:grid;grid-template-columns:1fr auto;gap:24px 40px;align-items:end}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.4vw,3.3rem);line-height:1.22;letter-spacing:-.01em;max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--h-bad)}
+.meta{color:var(--h-muted);font-size:.9rem;margin-top:14px}
+.meta b{color:var(--h-fg);font-weight:600}
+.quote{text-align:right;display:grid;gap:2px}
+.quote .px{font-family:var(--mono);font-size:clamp(2.4rem,5.5vw,4rem);font-weight:500;line-height:1;letter-spacing:-.03em}
+.quote .chg{font-family:var(--mono);color:var(--h-bad);font-size:1rem}
+.quote small{color:var(--h-muted);font-size:.8rem}
+.readout{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.82rem;color:var(--h-muted)}
+.readout b{font-family:var(--mono);color:var(--h-fg);font-weight:500}
+.readout i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:6px;border-radius:2px}
+.hchart{overflow-x:auto;margin-inline:-6px}
+.hchart svg:focus-visible{outline:2px solid var(--h-accent);outline-offset:4px}
+.hchart svg{display:block;width:100%;min-width:640px;height:auto;touch-action:pan-y}
+.h-grid{stroke:var(--h-line)}
+.h-ax{fill:var(--h-muted);font-family:var(--mono);font-size:11px}
+.h-lab{font-family:var(--sans);font-size:12.5px;font-weight:500}
+.h-g{fill:var(--h-good)}.h-r{fill:var(--h-bad)}
+.h-px{fill:none;stroke:var(--h-fg);stroke-width:2.2;stroke-linejoin:round}
+.h-ma50{fill:none;stroke:var(--h-accent);stroke-width:1.5}
+.h-ma200{fill:none;stroke:var(--h-warn);stroke-width:1.5;stroke-dasharray:6 4}
+.h-sup{fill:rgba(95,211,154,.17)}
+.h-gap{fill:rgba(255,139,123,.16);stroke:rgba(255,139,123,.5);stroke-dasharray:3 3}
+.h-trig{stroke:var(--h-good);stroke-dasharray:2 4}
+.h-stop{stroke:var(--h-bad);stroke-dasharray:2 4}
+.h-cross{stroke:var(--h-muted);stroke-width:1}
+.h-end{fill:var(--h-bad);stroke:var(--h-bg);stroke-width:2}
+
+.calls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--h-line)}
+.calls>div{padding:18px 20px 4px 0;display:grid;gap:4px;min-width:0}
+.calls>div+div{padding-left:20px;border-left:1px solid var(--h-line)}
+.calls span{font-size:.8rem;color:var(--h-muted)}
+.calls b{font-size:1.15rem;font-weight:600}
+.calls p{font-size:.85rem;color:var(--h-muted)}
+
+/* ---------- 본문 ---------- */
+main .in{display:grid;gap:72px;padding-block:56px 72px}
+section{display:grid;gap:22px;min-width:0}
+.sh{display:grid;gap:8px;max-width:68ch}
+.sh h2{font-family:var(--display);font-weight:800;font-size:clamp(1.45rem,2.6vw,1.95rem);line-height:1.3}
+.sh p{color:var(--muted)}
+.lede{font-size:1.08rem;max-width:62ch}
+.lede strong{font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-g{color:var(--good);background:var(--good-t)}.p-r{color:var(--bad);background:var(--bad-t)}
+.p-w{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}.p-a{color:var(--accent);background:var(--accent-t)}
+.g{color:var(--good)}.r{color:var(--bad)}.w{color:var(--warn)}.m{color:var(--muted)}
+
+/* 판단 블록 */
+.verdict{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:start}
+.holder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:8px}
+.holder h3{font-size:1rem}
+.holder p{color:var(--muted);font-size:.93rem}
+
+/* 기술 + 사다리 */
+.tech{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:40px;align-items:start}
+.facts{display:grid;gap:18px}
+.fact{display:grid;grid-template-columns:5.5em 1fr;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.fact:last-child{border-bottom:0}
+.fact dt{font-weight:700}
+.fact dd{margin:0;color:var(--muted)}
+.fact dd .num{color:var(--ink)}
+.ladder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 8px;overflow-x:auto}
+.ladder svg{display:block;width:100%;min-width:420px;height:auto}
+.l-axis{stroke:var(--line);stroke-width:2}
+.l-tick{stroke:var(--muted)}
+.l-ax{fill:var(--muted);font-family:var(--mono);font-size:11px}
+.l-risk{fill:var(--bad-t)}.l-rew{fill:var(--good-t)}
+.l-b-g{fill:var(--good)}.l-b-r{fill:var(--bad)}
+.l-lv{stroke-width:1.5}
+.l-lab{font-size:13px}
+.l-p{font-family:var(--mono);font-weight:600}
+.l-sub{fill:var(--muted)}
+.c-g{stroke:var(--good);fill:var(--good)}.c-r{stroke:var(--bad);fill:var(--bad)}.c-a{stroke:var(--accent);fill:var(--accent)}
+.c-f{stroke:var(--ink);fill:var(--ink)}.c-m{stroke:var(--muted);fill:var(--muted)}
+.l-r{fill:var(--bad);font-family:var(--mono);font-size:12px;font-weight:600}
+.l-w{fill:var(--good);font-family:var(--mono);font-size:12px;font-weight:600}
+.l-now{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+
+/* 매크로 */
+.gauge{display:grid;gap:10px;max-width:760px}
+.gtrack{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,var(--bad-t),var(--sunk) 45%,var(--good-t))}
+.gmark{position:absolute;top:-6px;width:3px;height:26px;border-radius:2px;background:var(--ink);transform:translateX(-50%)}
+.gmark.prev{background:var(--muted);opacity:.55}
+.gmark span{position:absolute;top:30px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.8rem;color:var(--muted)}
+.gmark.now span{color:var(--ink);font-weight:600}
+.gscale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--muted);padding-top:22px}
+.mtable{display:grid;gap:0;border-top:1px solid var(--line)}
+.mrow{display:grid;grid-template-columns:11em minmax(80px,1fr) 2.5em minmax(0,15em);gap:16px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.mname{display:grid}
+.mname span{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.mtrack{height:8px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.mtrack i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.mval{text-align:right;font-weight:600}
+.mnote{color:var(--muted);font-size:.88rem}
+
+/* 시나리오 */
+.split{display:flex;height:46px;border-radius:8px;overflow:hidden;font-family:var(--mono);font-weight:600}
+.split>div{display:flex;align-items:center;padding-inline:14px;color:var(--surface)}
+.s-bear{flex:30;background:var(--bad)}.s-base{flex:45;background:var(--warn)}.s-bull{flex:25;background:var(--good)}
+.scen{display:grid;grid-template-columns:30fr 45fr 25fr;gap:0}
+.scen article{padding:14px 18px 0 0;display:grid;gap:6px;align-content:start}
+.scen article+article{padding-left:18px;border-left:1px solid var(--line)}
+.scen h3{font-size:1rem}
+.scen p{color:var(--muted);font-size:.92rem}
+.axisnote{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+
+/* 가설 표 */
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:.8rem}
+tr:last-child td{border-bottom:0}
+tr.pick td{background:var(--good-t)}
+td.n{white-space:nowrap}
+.kill{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kill div{border-top:2px solid var(--bad);padding-top:10px;display:grid;gap:2px}
+.kill b{font-size:.95rem}
+.kill span{color:var(--muted);font-size:.88rem}
+
+/* 주문표 */
+.exec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+.ticket{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 12px 32px -18px rgba(15,26,42,.35)}
+.ticket header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 20px;background:var(--sunk);font-size:.82rem;color:var(--muted)}
+.ticket header b{color:var(--ink);font-family:var(--mono)}
+.ticket dl{margin:0;display:grid;grid-template-columns:auto 1fr;font-size:.93rem}
+.ticket dt,.ticket dd{padding:10px 20px;border-top:1px solid var(--line);margin:0}
+.ticket dt{color:var(--muted)}
+.ticket dd{font-variant-numeric:tabular-nums;text-align:right;font-weight:500}
+.ticket .tot{font-weight:700}
+.rules{display:grid;gap:14px}
+.rules p{color:var(--muted)}
+.rules strong{color:var(--ink)}
+
+/* 루프 */
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.loop>div{background:var(--surface);padding:16px 18px;display:grid;gap:6px;align-content:start;min-width:0}
+.loop .k{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.loop .pill{justify-self:start}
+.loop b{font-size:.95rem}
+.loop p{font-size:.84rem;color:var(--muted)}
+.loop .skip{background:var(--sunk)}
+
+footer{border-top:1px solid var(--line)}
+footer .in{padding-block:28px 40px;display:grid;gap:8px;font-size:.83rem;color:var(--muted);max-width:1080px}
+footer p{max-width:90ch}
+
+@media (max-width:860px){
+  .hero-top,.verdict,.tech,.exec{grid-template-columns:1fr}
+  .quote{text-align:left}
+  .loop{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mrow{grid-template-columns:8.5em minmax(60px,1fr) 2.2em}
+  .mnote{grid-column:1/-1;margin-top:-6px}
+}
+@media (max-width:560px){
+  .calls{grid-template-columns:1fr}
+  .calls>div+div{padding-left:0;border-left:0;border-top:1px solid var(--h-line)}
+  .calls>div{padding-bottom:14px}
+  .scen,.kill{grid-template-columns:1fr}
+  .scen article+article{padding-left:0;border-left:0;border-top:1px solid var(--line)}
+  .scen article{padding-bottom:12px}
+  .split>div{padding-inline:8px;font-size:.85rem}
+  .loop{grid-template-columns:1fr}
+}
+</style>
+
+<div class="hero">
+  <div class="in">
+    <div class="hero-top">
+      <div>
+        <h1>실적 하루 만에 <em>-12.3%</em>, 1년 지켜온 지지대 앞에 섰다</h1>
+        <p class="meta"><b>GOOG</b> Alphabet Class C · 2026-10-30 종가 기준 · 페이퍼 트레이딩 리포트</p>
+      </div>
+      <div class="quote">
+        <div class="px">278.22</div>
+        <div class="chg">5일 -12.3% · 21일 -16.9%</div>
+        <small>RSI(14) 13.3 · 10/29 거래량 93M (평균의 약 5배)</small>
+      </div>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span><b id="rd">2026-10-30 · 278.22</b></span>
+      <span><i style="background:var(--h-fg)"></i>종가</span>
+      <span><i style="background:var(--h-accent)"></i>50일선 335.7</span>
+      <span><i style="background:var(--h-warn)"></i>200일선 338.7</span>
+    </div>
+    <div class="hchart"><svg id="hc" tabindex="0" viewBox="0 0 1000 380" role="img" aria-label="GOOG 최근 130거래일 종가 차트. 좌우 화살표 키로 날짜별 종가를 확인합니다"><line x1="44" x2="984" y1="316.8" y2="316.8" class="h-grid"/><text x="36" y="320.8" class="h-ax" text-anchor="end">275</text><line x1="44" x2="984" y1="261.5" y2="261.5" class="h-grid"/><text x="36" y="265.5" class="h-ax" text-anchor="end">300</text><line x1="44" x2="984" y1="206.1" y2="206.1" class="h-grid"/><text x="36" y="210.1" class="h-ax" text-anchor="end">325</text><line x1="44" x2="984" y1="150.8" y2="150.8" class="h-grid"/><text x="36" y="154.8" class="h-ax" text-anchor="end">350</text><line x1="44" x2="984" y1="95.5" y2="95.5" class="h-grid"/><text x="36" y="99.5" class="h-ax" text-anchor="end">375</text><line x1="44" x2="984" y1="40.1" y2="40.1" class="h-grid"/><text x="36" y="44.1" class="h-ax" text-anchor="end">400</text><text x="65.9" y="372" class="h-ax" text-anchor="middle">5월</text><text x="211.6" y="372" class="h-ax" text-anchor="middle">6월</text><text x="364.6" y="372" class="h-ax" text-anchor="middle">7월</text><text x="524.9" y="372" class="h-ax" text-anchor="middle">8월</text><text x="678.0" y="372" class="h-ax" text-anchor="middle">9월</text><text x="831.0" y="372" class="h-ax" text-anchor="middle">10월</text><rect x="44" width="940" y="314.6" height="11.1" class="h-sup"/><text x="379.2" y="306.6" class="h-lab h-g">지지대 271–276 · 2025-11, 2026-03 저점에 이어 세 번째 시험</text><rect x="973.1" width="10.9" y="217.9" height="73.6" class="h-gap"/><text x="965.1" y="254.8" class="h-lab h-r" text-anchor="end">미체결 갭 286.4–319.7</text><polyline points="44.0,309.1 51.3,307.3 58.6,305.1 65.9,302.9 73.1,300.7 80.4,298.5 87.7,296.3 95.0,294.0 102.3,291.7 109.6,289.6 116.9,287.5 124.2,285.2 131.4,283.0 138.7,280.8 146.0,278.6 153.3,276.5 160.6,274.4 167.9,272.3 175.2,270.3 182.4,268.2 189.7,266.2 197.0,264.1 204.3,262.2 211.6,260.3 218.9,258.6 226.2,257.0 233.5,255.1 240.7,253.3 248.0,251.5 255.3,249.8 262.6,248.1 269.9,246.5 277.2,244.8 284.5,243.1 291.8,241.3 299.0,239.7 306.3,238.0 313.6,236.7 320.9,235.4 328.2,234.2 335.5,233.0 342.8,231.9 350.0,230.7 357.3,229.5 364.6,228.2 371.9,227.0 379.2,225.8 386.5,224.5 393.8,223.3 401.1,222.2 408.3,221.1 415.6,220.0 422.9,218.8 430.2,217.4 437.5,216.2 444.8,215.1 452.1,213.9 459.3,212.8 466.6,211.7 473.9,210.9 481.2,210.2 488.5,209.3 495.8,208.3 503.1,207.3 510.4,206.2 517.6,205.0 524.9,203.6 532.2,202.2 539.5,201.0 546.8,199.9 554.1,198.8 561.4,197.7 568.7,196.7 575.9,195.7 583.2,194.8 590.5,194.0 597.8,193.2 605.1,192.4 612.4,191.8 619.7,191.1 626.9,190.5 634.2,189.8 641.5,189.1 648.8,188.5 656.1,187.9 663.4,187.3 670.7,186.8 678.0,186.3 685.2,185.7 692.5,185.0 699.8,184.5 707.1,183.9 714.4,183.5 721.7,183.1 729.0,182.7 736.2,182.4 743.5,182.2 750.8,182.0 758.1,181.7 765.4,181.4 772.7,181.0 780.0,180.7 787.3,180.5 794.5,180.3 801.8,180.0 809.1,179.8 816.4,179.6 823.7,179.3 831.0,179.1 838.3,178.7 845.6,178.3 852.8,177.8 860.1,177.3 867.4,176.9 874.7,176.5 882.0,176.1 889.3,175.8 896.6,175.5 903.8,175.1 911.1,174.9 918.4,174.6 925.7,174.3 933.0,174.2 940.3,174.1 947.6,174.2 954.9,174.3 962.1,174.4 969.4,174.6 976.7,175.2 984.0,175.8" class="h-ma200"/><polyline points="44.0,238.9 51.3,237.0 58.6,233.5 65.9,230.0 73.1,227.1 80.4,223.9 87.7,220.2 95.0,216.5 102.3,212.6 109.6,209.2 116.9,205.8 124.2,201.6 131.4,197.4 138.7,193.3 146.0,189.1 153.3,185.6 160.6,182.2 167.9,178.9 175.2,175.5 182.4,171.8 189.7,168.2 197.0,164.9 204.3,161.7 211.6,158.8 218.9,156.1 226.2,153.6 233.5,150.1 240.7,146.7 248.0,143.2 255.3,139.2 262.6,135.7 269.9,132.6 277.2,129.8 284.5,126.6 291.8,123.3 299.0,120.8 306.3,118.4 313.6,117.0 320.9,115.7 328.2,114.5 335.5,114.0 342.8,114.0 350.0,113.2 357.3,112.6 364.6,111.6 371.9,110.4 379.2,109.2 386.5,108.1 393.8,107.3 401.1,107.0 408.3,106.7 415.6,106.5 422.9,107.6 430.2,108.2 437.5,109.3 444.8,111.0 452.1,113.0 459.3,115.1 466.6,117.6 473.9,120.6 481.2,123.5 488.5,126.7 495.8,129.5 503.1,132.1 510.4,134.7 517.6,136.0 524.9,136.5 532.2,136.9 539.5,137.7 546.8,139.0 554.1,140.4 561.4,141.7 568.7,143.2 575.9,144.5 583.2,145.2 590.5,145.7 597.8,146.9 605.1,148.0 612.4,148.9 619.7,149.9 626.9,150.5 634.2,151.0 641.5,151.6 648.8,152.9 656.1,154.4 663.4,155.2 670.7,156.6 678.0,157.4 685.2,157.9 692.5,158.2 699.8,158.5 707.1,158.4 714.4,159.5 721.7,160.5 729.0,161.5 736.2,161.9 743.5,163.0 750.8,164.0 758.1,164.7 765.4,165.2 772.7,165.4 780.0,165.6 787.3,166.6 794.5,167.9 801.8,168.5 809.1,168.8 816.4,169.4 823.7,169.7 831.0,170.0 838.3,169.0 845.6,167.9 852.8,167.1 860.1,166.5 867.4,166.1 874.7,165.4 882.0,165.8 889.3,166.8 896.6,168.2 903.8,168.9 911.1,169.7 918.4,170.3 925.7,171.2 933.0,171.7 940.3,172.7 947.6,173.9 954.9,175.2 962.1,176.2 969.4,177.1 976.7,179.7 984.0,182.4" class="h-ma50"/><polyline points="44.0,156.3 51.3,156.8 58.6,80.1 65.9,77.3 73.1,85.2 80.4,74.9 87.7,50.9 95.0,50.5 102.3,46.7 109.6,69.4 116.9,75.9 124.2,42.3 131.4,46.4 138.7,54.9 146.0,55.4 153.3,73.6 160.6,73.6 167.9,76.7 175.2,85.8 182.4,73.7 189.7,73.7 197.0,70.9 204.3,92.3 211.6,100.8 218.9,132.2 226.2,138.2 233.5,108.1 240.7,115.9 248.0,126.1 255.3,123.6 262.6,143.5 269.9,136.3 277.2,132.7 284.5,112.9 291.8,104.1 299.0,124.0 306.3,112.2 313.6,153.5 320.9,159.5 328.2,161.8 335.5,168.1 342.8,184.7 350.0,148.0 357.3,143.4 364.6,133.3 371.9,137.1 379.2,117.8 386.5,120.7 393.8,131.5 401.1,137.0 408.3,139.7 415.6,149.3 422.9,134.6 430.2,106.1 437.5,142.4 444.8,159.4 452.1,147.8 459.3,159.2 466.6,168.7 473.9,220.9 481.2,219.2 488.5,202.7 495.8,189.3 503.1,182.3 510.4,186.9 517.6,136.1 524.9,101.1 532.2,94.7 539.5,128.4 546.8,136.1 554.1,143.1 561.4,137.9 568.7,166.3 575.9,167.7 583.2,164.2 590.5,165.1 597.8,169.7 605.1,170.1 612.4,169.2 619.7,176.9 626.9,169.1 634.2,162.8 641.5,165.5 648.8,174.9 656.1,178.0 663.4,166.6 670.7,183.1 678.0,190.6 685.2,186.7 692.5,175.0 699.8,183.3 707.1,183.2 714.4,198.7 721.7,194.2 729.0,183.0 736.2,160.3 743.5,169.8 750.8,174.3 758.1,164.8 765.4,163.2 772.7,148.9 780.0,156.5 787.3,184.0 794.5,175.1 801.8,170.5 809.1,174.8 816.4,178.9 823.7,171.3 831.0,184.2 838.3,172.2 845.6,164.5 852.8,162.8 860.1,156.6 867.4,162.2 874.7,155.5 882.0,153.1 889.3,151.9 896.6,164.9 903.8,162.1 911.1,179.8 918.4,172.6 925.7,180.9 933.0,193.0 940.3,215.5 947.6,223.2 954.9,230.1 962.1,224.2 969.4,213.0 976.7,300.6 984.0,309.7" class="h-px"/><line x1="44" x2="984" y1="290.2" y2="290.2" class="h-trig"/><line x1="44" x2="984" y1="331.2" y2="331.2" class="h-stop"/><text x="965.1" y="284.2" class="h-lab h-g" text-anchor="end">매수 트리거 287.00</text><text x="965.1" y="346.2" class="h-lab h-r" text-anchor="end">손절 268.50</text><line id="hx" x1="0" x2="0" y1="18" y2="350" class="h-cross" visibility="hidden"/><circle id="hd" cx="984.0" cy="309.7" r="5" class="h-end"/><rect x="44" y="18" width="940" height="332" fill="transparent" id="hz"/></svg></div>
+    <div class="calls">
+      <div><span>지금</span><b>매수 보류</b><p>떨어지는 칼은 잡지 않습니다</p></div>
+      <div><span>진입 조건</span><b class="num" style="color:var(--h-good)">287.00 역지정가</b><p>갭다운 당일 고가 286.43 회복 시</p></div>
+      <div><span>무효화</span><b class="num" style="color:var(--h-bad)">종가 270 이탈</b><p>또는 11/13까지 미발동 시 취소</p></div>
+    </div>
+  </div>
+</div>
+
+<main><div class="in">
+
+<section class="verdict">
+  <div class="sh">
+    <h2>바닥을 미리 사지 말고, 287을 다시 넘을 때만 들어갑니다</h2>
+    <p class="lede">RSI 13은 극단적 과매도이고 271 지지대는 이미 두 번 버텼습니다. 그래도 실적 갭은 몇 주씩 밀리는 경우가 많고, 10/30에도 저점을 낮췄습니다. 그래서 <strong>갭다운 당일 고가 위에 역지정가 매수</strong>를 걸어두고, 270을 종가로 깨면 아이디어를 접습니다.</p>
+  </div>
+  <div class="holder">
+    <span><span class="pill p-w">이미 보유 중이라면</span></span>
+    <h3>손절선 268.50, 물타기 금지</h3>
+    <p>종가 270 이탈을 손절 기준으로 둡니다. 287을 회복하기 전에는 추가 매수로 평단을 낮추지 않습니다.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>기술적 현황과 가격 사다리</h2>
+    <p>오른쪽 사다리는 실제 가격 축척입니다. 빨간 구간은 진입 후 감수하는 리스크(1R), 초록 구간은 목표 2까지의 보상입니다.</p>
+  </div>
+  <div class="tech">
+    <dl class="facts">
+      <div class="fact"><dt>추세</dt><dd>5월 고점 <span class="num">404.47</span> 이후 고점이 계속 낮아지는 하락 추세입니다. 10/29 갭으로 20·50·100·200일선(<span class="num">330.6 / 335.7 / 343.1 / 338.7</span>)을 한꺼번에 내줬습니다.</dd></div>
+      <div class="fact"><dt>주봉</dt><dd>이번 주 <span class="num">-12.3%</span>, 거래량 <span class="num">208M</span>으로 최근 20주 중 최대입니다. 10주선 <span class="num">332</span>, 40주선 <span class="num">337.6</span> 아래에서 마감했습니다.</dd></div>
+      <div class="fact"><dt>모멘텀</dt><dd>MACD(12,26) <span class="num">-11.97</span>, RSI <span class="num">13.3</span>, ATR <span class="num">10.68</span>. 과매도는 반등 근거가 되지만 그것만으로는 바닥이라고 할 수 없습니다.</dd></div>
+      <div class="fact"><dt>지지</dt><dd>2025-11-14 저점 <span class="num">271.41</span>, 2026-03-30 저점 <span class="num">271.5</span>. 같은 구간의 세 번째 시험입니다.</dd></div>
+      <div class="fact"><dt>실적 점수</dt><dd>earnings-trade-analyzer 5요소 평가에서 <b>D등급 (<span class="num">45.2</span>/100)</b>입니다. 갭 크기 <span class="num">100</span>점, 실적 전 추세·200일선·50일선 위치는 각 <span class="num">15</span>점, 거래량 추세 <span class="num">60</span>점. 갭만 크고 추세 뒷받침이 없다는 뜻이라, 바로 매수하지 않는 판단과 일치합니다.</dd></div>
+      <div class="fact"><dt>거래량</dt><dd>갭 당일 <span class="num">93M</span>, 다음 날 <span class="num">45M</span>. 투매성 매도가 나왔지만 둘째 날에도 저점을 낮춰, 매수세가 들어왔다는 증거는 아직 없습니다.</dd></div>
+    </dl>
+    <div class="ladder"><svg viewBox="0 0 520 560" role="img" aria-label="가격 사다리: 손절 268.50, 매수 287.00, 목표 314와 320, 주요 지지와 저항"><rect x="98" width="28" y="307.2" height="91.6" class="l-risk"/><rect x="98" width="28" y="143.8" height="163.4" class="l-rew"/><line x1="112" x2="112" y1="20" y2="540" class="l-axis"/><line x1="108" x2="116" y1="540.0" y2="540.0" class="l-tick"/><text x="90" y="544.0" class="l-ax" text-anchor="end">240</text><line x1="108" x2="116" y1="490.5" y2="490.5" class="l-tick"/><text x="90" y="494.5" class="l-ax" text-anchor="end">250</text><line x1="108" x2="116" y1="441.0" y2="441.0" class="l-tick"/><text x="90" y="445.0" class="l-ax" text-anchor="end">260</text><line x1="108" x2="116" y1="391.4" y2="391.4" class="l-tick"/><text x="90" y="395.4" class="l-ax" text-anchor="end">270</text><line x1="108" x2="116" y1="341.9" y2="341.9" class="l-tick"/><text x="90" y="345.9" class="l-ax" text-anchor="end">280</text><line x1="108" x2="116" y1="292.4" y2="292.4" class="l-tick"/><text x="90" y="296.4" class="l-ax" text-anchor="end">290</text><line x1="108" x2="116" y1="242.9" y2="242.9" class="l-tick"/><text x="90" y="246.9" class="l-ax" text-anchor="end">300</text><line x1="108" x2="116" y1="193.3" y2="193.3" class="l-tick"/><text x="90" y="197.3" class="l-ax" text-anchor="end">310</text><line x1="108" x2="116" y1="143.8" y2="143.8" class="l-tick"/><text x="90" y="147.8" class="l-ax" text-anchor="end">320</text><line x1="108" x2="116" y1="94.3" y2="94.3" class="l-tick"/><text x="90" y="98.3" class="l-ax" text-anchor="end">330</text><line x1="108" x2="116" y1="44.8" y2="44.8" class="l-tick"/><text x="90" y="48.8" class="l-ax" text-anchor="end">340</text><rect x="130" width="10" y="51.2" height="14.9" class="l-b-r"/><line x1="98" x2="146" y1="58.6" y2="58.6" class="l-lv c-r"/><text x="156" y="62.6" class="l-lab c-r"><tspan class="l-p">335.7–338.7</tspan><tspan dx="10" class="l-sub">50·200일선 밀집</tspan></text><line x1="98" x2="146" y1="143.8" y2="143.8" class="l-lv c-g"/><text x="156" y="147.8" class="l-lab c-g"><tspan class="l-p">320.00</tspan><tspan dx="10" class="l-sub">목표 2 · 갭 상단</tspan></text><line x1="98" x2="146" y1="173.5" y2="173.5" class="l-lv c-g"/><text x="156" y="177.5" class="l-lab c-g"><tspan class="l-p">314.00</tspan><tspan dx="10" class="l-sub">목표 1 · 절반 익절</tspan></text><line x1="98" x2="146" y1="307.2" y2="307.2" class="l-lv c-a"/><text x="156" y="311.2" class="l-lab c-a"><tspan class="l-p">287.00</tspan><tspan dx="10" class="l-sub">매수 트리거</tspan></text><line x1="98" x2="146" y1="350.7" y2="350.7" class="l-lv c-f"/><text x="156" y="354.7" class="l-lab c-f"><tspan class="l-p">278.22</tspan><tspan dx="10" class="l-sub">10/30 종가</tspan></text><rect x="130" width="10" y="361.7" height="24.8" class="l-b-g"/><line x1="98" x2="146" y1="374.1" y2="374.1" class="l-lv c-g"/><text x="156" y="378.1" class="l-lab c-g"><tspan class="l-p">271–276</tspan><tspan dx="10" class="l-sub">이중 바닥 지지대</tspan></text><line x1="98" x2="146" y1="398.9" y2="398.9" class="l-lv c-r"/><text x="156" y="410.9" class="l-lab c-r"><tspan class="l-p">268.50</tspan><tspan dx="10" class="l-sub">손절</tspan></text><rect x="130" width="10" y="465.7" height="49.5" class="l-b-g"/><line x1="98" x2="146" y1="490.5" y2="490.5" class="l-lv c-m"/><text x="156" y="494.5" class="l-lab c-m"><tspan class="l-p">245–255</tspan><tspan dx="10" class="l-sub">다음 지지 (근사)</tspan></text><text x="54" y="357.0" class="l-r" text-anchor="end">-1R</text><text x="54" y="229.5" class="l-w" text-anchor="end">+1.78R</text><circle cx="112" cy="350.7" r="5" class="l-now"/></svg></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>매크로 국면: Transitional</h2>
+    <p>종합 46.8/100, 신뢰도 보통, 국면 전환 확률 40~60%. 8월 11일 Broadening(60.8)에서 한 단계 식었습니다.</p>
+  </div>
+  <div class="gauge" role="img" aria-label="매크로 종합 점수 46.8, 8월 11일 60.8">
+    <div class="gtrack">
+      <div class="gmark prev" style="left:60.8%"><span>8/11 · 60.8</span></div>
+      <div class="gmark now" style="left:46.8%"><span>현재 · 46.8</span></div>
+    </div>
+    <div class="gscale"><span>0</span><span>50</span><span>100</span></div>
+  </div>
+  <div class="mtable"><div class="mrow"><div class="mname"><b>시장 집중도</b><span>RSP/SPY</span></div><div class="mtrack"><i style="width:50%"></i></div><div class="mval num">50</div><div class="mnote">이동평균 수렴, 방향 미정</div></div><div class="mrow"><div class="mname"><b>수익률 곡선</b><span>10Y–2Y</span></div><div class="mtrack"><i style="width:50%"></i></div><div class="mval num">50</div><div class="mnote">스티프닝 (SHY/TLT 대용치)</div></div><div class="mrow"><div class="mname"><b>신용</b><span>HYG/LQD</span></div><div class="mtrack"><i style="width:43%"></i></div><div class="mval num">43</div><div class="mnote">신용 조건 조이는 중</div></div><div class="mrow"><div class="mname"><b>규모</b><span>IWM/SPY</span></div><div class="mtrack"><i style="width:69%"></i></div><div class="mval num">69</div><div class="mnote">대형주 우위로 이동</div></div><div class="mrow"><div class="mname"><b>주식·채권</b><span>SPY/TLT</span></div><div class="mtrack"><i style="width:10%"></i></div><div class="mval num">10</div><div class="mnote">상관 안정</div></div><div class="mrow"><div class="mname"><b>섹터 로테이션</b><span>XLY/XLP</span></div><div class="mtrack"><i style="width:60%"></i></div><div class="mval num">60</div><div class="mnote">방어주 쪽으로 이동</div></div></div>
+  <p class="m" style="max-width:68ch">GOOG에 주는 의미: 대형주 우위는 우호적이지만 신용 경색과 방어주 선호는 하락 종목의 반등을 늦출 수 있습니다. 신규 진입은 허용하되 확인 신호를 기다리는 쪽이 국면과 맞습니다.</p>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>향후 2~6주 시나리오</h2>
+    <p>가격 방향 순서로 놓았습니다. 왼쪽이 하락, 오른쪽이 상승입니다.</p>
+  </div>
+  <div style="display:grid;gap:8px">
+    <div class="split" role="img" aria-label="약세 30%, 기본 45%, 강세 25%">
+      <div class="s-bear">30%</div><div class="s-base">45%</div><div class="s-bull">25%</div>
+    </div>
+    <div class="axisnote"><span>← 245~255</span><span>271~300 박스</span><span>314~320 →</span></div>
+  </div>
+  <div class="scen">
+    <article><h3 class="r">약세 · 지지대 이탈</h3><p>270 아래 종가가 나오면 1년 지지대가 무너진 것으로 봅니다. 다음 지지는 245~255 근처입니다.</p></article>
+    <article><h3 class="w">기본 · 바닥 다지기</h3><p>271~300 사이에서 횡보하며 과매도를 해소합니다. 갭을 바로 메우지는 못합니다.</p></article>
+    <article><h3 class="g">강세 · 갭 메우기</h3><p>287 위에서 종가를 지키면 314~320 갭 구간까지 되돌림이 열립니다.</p></article>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>트레이드 가설</h2>
+    <p>세 가지를 세워 점수를 매겼고, 확인 신호를 기다리는 H-001만 채택했습니다.</p>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>ID</th><th>가설</th><th>점수</th><th>판정</th></tr>
+    <tr class="pick"><td class="n">H-001</td><td>271 지지 유지 + 286.43 회복 시 매수. 손절 268.50, 목표 314 / 320</td><td class="n">3.6</td><td><span class="pill p-g">채택</span></td></tr>
+    <tr><td class="n">H-003</td><td>실적 후 하락 드리프트 지속. 롱 전용 계좌라 H-001의 하방 필터로만 사용</td><td class="n">2.6</td><td><span class="pill p-w">보류</span></td></tr>
+    <tr><td class="n">H-002</td><td>지금 278에서 바로 매수. 확인 신호가 없어 떨어지는 칼을 잡는 셈</td><td class="n">2.5</td><td><span class="pill p-r">기각</span></td></tr>
+  </table></div>
+  <div class="kill">
+    <div><b>일봉 종가 270 미만</b><span>주문 취소 또는 손절</span></div>
+    <div><b>11/13까지 미발동</b><span>10거래일 경과 시 주문 취소 후 재점검</span></div>
+    <div><b>주봉 종가 271 미만</b><span>가설 폐기</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>실행 계획</h2>
+    <p>계좌 $100,000, 리스크 1% 기준으로 계산한 페이퍼 주문입니다.</p>
+  </div>
+  <div class="exec">
+    <div class="ticket">
+      <header><span>페이퍼 주문표</span><b>th_goog_rev_20261031_6194</b></header>
+      <dl>
+        <dt>종목</dt><dd class="num">GOOG</dd>
+        <dt>주문 유형</dt><dd class="num">BUY STOP</dd>
+        <dt>트리거</dt><dd class="g num">287.00</dd>
+        <dt>수량</dt><dd>54주</dd>
+        <dt>손절</dt><dd class="r num">268.50</dd>
+        <dt>목표 1 / 2</dt><dd class="g num">314.00 / 320.00</dd>
+        <dt>유효 기간</dt><dd class="num">2026-11-13</dd>
+        <dt>포지션 금액</dt><dd>$15,498 (15.5%)</dd>
+        <dt class="tot">최대 손실</dt><dd class="tot r">$999 (1.0%)</dd>
+      </dl>
+    </div>
+    <div class="rules">
+      <p><strong>익절:</strong> 목표 1(314, 1.46R)에서 절반을 팔고, 남은 물량은 손절을 진입가 287로 올립니다. 목표 2(320, 1.78R)에서 나머지를 정리합니다.</p>
+      <p><strong>시가 갭 주의:</strong> 시가가 287보다 크게 높게 열리면 슬리피지 때문에 실제 리스크가 커집니다. 시가가 292를 넘으면 진입하지 않습니다.</p>
+      <p><strong>체결 후:</strong> open-position으로 ACTIVE 전환, 청산 후 postmortem으로 복기합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>8단계 점검 루프</h2>
+    <p>순서대로 실행한 결과입니다. GO 판정은 287 역지정가 주문 계획에 대한 것입니다.</p>
+  </div>
+  <div class="loop">
+    <div><span class="k">1 · 매크로 국면</span><b>Transitional 46.8</b><p>신규 진입 허용, 확인 신호 필요</p></div>
+    <div><span class="k">2 · 기술적 분석</span><b>하락 추세, 지지대 시험</b><p>트리거 287 / 무효 270</p></div>
+    <div><span class="k">3 · 실적 점검</span><b>실적 후 D등급 45.2</b><p>스크리닝은 생략(종목 지정)</p></div>
+    <div><span class="k">4 · 가설</span><b>H-001 채택</b><p>점수 3.6, kill 조건 3개</p></div>
+    <div><span class="k">5 · 사이징</span><b>54주 · $999</b><p>리스크 1.0%</p></div>
+    <div><span class="k">6 · 진입 게이트</span><span class="pill p-g">GO</span><p>계획·손절·수량·리스크 일치</p></div>
+    <div><span class="k">7 · 서킷브레이커</span><span class="pill p-g">TRADING_ALLOWED</span><p>청산 기록 없음</p></div>
+    <div><span class="k">8 · 트레이더 메모리</span><span class="pill p-a">ENTRY_READY</span><p>조건부 주문 대기</p></div>
+  </div>
+</section>
+
+</div></main>
+
+<footer><div class="in">
+  <p>데이터: GOOG 일봉은 yfinance 기준입니다. FMP 무료 플랜은 GOOG 시세를 막고 있습니다(402). 매크로 국면은 FMP 데이터로 계산했습니다.</p>
+  <p>실적 점수는 무료 FMP 플랜에서 GOOG 조회가 막혀 같은 회사의 GOOGL(갭 -11.7%) 기준으로 계산했습니다. 갭다운 원인: 10/28 장 마감 후 3분기 실적 발표(FMP 실적 캘린더로 확인). 일부 매체가 capex 전망 상향과 EPS 미스를 언급하지만, 10/29 당일 기사로 확인하지 못했습니다. 이 리포트의 판단은 가격과 거래량에만 근거합니다.</p>
+  <p>시나리오 확률과 다음 지지(245~255)는 차트에 근거한 추정치입니다. 페이퍼 트레이딩 연습용이며 투자 권유가 아닙니다.</p>
+</div></footer>
+
+<script>
+(function(){
+  var S=[["2026-04-28", 347.5], ["2026-04-29", 347.31], ["2026-04-30", 381.94], ["2026-05-01", 383.22], ["2026-05-04", 379.64], ["2026-05-05", 384.27], ["2026-05-06", 395.14], ["2026-05-07", 395.3], ["2026-05-08", 397.05], ["2026-05-11", 386.77], ["2026-05-12", 383.82], ["2026-05-13", 399.04], ["2026-05-14", 397.17], ["2026-05-15", 393.32], ["2026-05-18", 393.11], ["2026-05-19", 384.9], ["2026-05-20", 384.9], ["2026-05-21", 383.47], ["2026-05-22", 379.38], ["2026-05-26", 384.84], ["2026-05-27", 384.83], ["2026-05-28", 386.12], ["2026-05-29", 376.43], ["2026-06-01", 372.58], ["2026-06-02", 358.39], ["2026-06-03", 355.68], ["2026-06-04", 369.27], ["2026-06-05", 365.76], ["2026-06-08", 361.17], ["2026-06-09", 362.29], ["2026-06-10", 353.32], ["2026-06-11", 356.56], ["2026-06-12", 358.16], ["2026-06-15", 367.11], ["2026-06-16", 371.1], ["2026-06-17", 362.1], ["2026-06-18", 367.46], ["2026-06-22", 348.78], ["2026-06-23", 346.08], ["2026-06-24", 345.04], ["2026-06-25", 342.19], ["2026-06-26", 334.69], ["2026-06-29", 351.28], ["2026-06-30", 353.33], ["2026-07-01", 357.89], ["2026-07-02", 356.18], ["2026-07-06", 364.9], ["2026-07-07", 363.62], ["2026-07-08", 358.71], ["2026-07-09", 356.24], ["2026-07-10", 355.03], ["2026-07-13", 350.67], ["2026-07-14", 357.33], ["2026-07-15", 370.21], ["2026-07-16", 353.81], ["2026-07-17", 346.12], ["2026-07-20", 351.37], ["2026-07-21", 346.19], ["2026-07-22", 341.91], ["2026-07-23", 318.34], ["2026-07-24", 319.09], ["2026-07-27", 326.57], ["2026-07-28", 332.6], ["2026-07-29", 335.76], ["2026-07-30", 333.68], ["2026-07-31", 356.65], ["2026-08-03", 372.47], ["2026-08-04", 375.35], ["2026-08-05", 360.13], ["2026-08-06", 356.62], ["2026-08-07", 353.47], ["2026-08-10", 355.84], ["2026-08-11", 343.0], ["2026-08-12", 342.37], ["2026-08-13", 343.94], ["2026-08-14", 343.54], ["2026-08-17", 341.45], ["2026-08-18", 341.28], ["2026-08-19", 341.7], ["2026-08-20", 338.2], ["2026-08-21", 341.75], ["2026-08-24", 344.59], ["2026-08-25", 343.34], ["2026-08-26", 339.1], ["2026-08-27", 337.71], ["2026-08-28", 342.88], ["2026-08-31", 335.41], ["2026-09-01", 332.03], ["2026-09-02", 333.78], ["2026-09-03", 339.08], ["2026-09-04", 335.31], ["2026-09-08", 335.38], ["2026-09-09", 328.38], ["2026-09-10", 330.39], ["2026-09-11", 335.45], ["2026-09-14", 345.71], ["2026-09-15", 341.43], ["2026-09-16", 339.36], ["2026-09-17", 343.68], ["2026-09-18", 344.41], ["2026-09-21", 350.87], ["2026-09-22", 347.41], ["2026-09-23", 334.98], ["2026-09-24", 339.01], ["2026-09-25", 341.08], ["2026-09-28", 339.16], ["2026-09-29", 337.32], ["2026-09-30", 340.74], ["2026-10-01", 334.93], ["2026-10-02", 340.35], ["2026-10-05", 343.83], ["2026-10-06", 344.59], ["2026-10-07", 347.37], ["2026-10-08", 344.86], ["2026-10-09", 347.86], ["2026-10-12", 348.97], ["2026-10-13", 349.52], ["2026-10-14", 343.65], ["2026-10-15", 344.91], ["2026-10-16", 336.91], ["2026-10-19", 340.16], ["2026-10-20", 336.4], ["2026-10-21", 330.95], ["2026-10-22", 320.76], ["2026-10-23", 317.28], ["2026-10-26", 314.19], ["2026-10-27", 316.83], ["2026-10-28", 321.89], ["2026-10-29", 282.32], ["2026-10-30", 278.22]], G={"W": 1000, "L": 44, "R": 16, "T": 18, "B": 30, "H": 380, "lo": 260, "hi": 410, "N": 130};
+  var svg=document.getElementById('hc'), zone=document.getElementById('hz'),
+      cx=document.getElementById('hx'), dot=document.getElementById('hd'), rd=document.getElementById('rd');
+  if(!svg) return;
+  var X=function(k){return G.L+(G.W-G.L-G.R)*k/(G.N-1)},
+      Y=function(p){return G.T+(G.H-G.T-G.B)*(G.hi-p)/(G.hi-G.lo)};
+  function show(k){
+    var p=S[k]; cx.setAttribute('x1',X(k)); cx.setAttribute('x2',X(k)); cx.setAttribute('visibility','visible');
+    dot.setAttribute('cx',X(k)); dot.setAttribute('cy',Y(p[1])); rd.textContent=p[0]+' · '+p[1].toFixed(2);
+  }
+  function reset(){ cx.setAttribute('visibility','hidden'); show(G.N-1); cx.setAttribute('visibility','hidden'); }
+  zone.addEventListener('pointermove',function(e){
+    var r=svg.getBoundingClientRect(), x=(e.clientX-r.left)/r.width*G.W;
+    show(Math.max(0,Math.min(G.N-1,Math.round((x-G.L)/(G.W-G.L-G.R)*(G.N-1)))));
+  });
+  zone.addEventListener('pointerleave',reset);
+  var cur=G.N-1;
+  svg.addEventListener('keydown',function(e){
+    var d=e.key==='ArrowLeft'?-1:e.key==='ArrowRight'?1:0; if(!d) return;
+    e.preventDefault(); cur=Math.max(0,Math.min(G.N-1,cur+d)); show(cur);
+  });
+  svg.addEventListener('blur',reset);
+  var box=svg.parentElement; if(box.scrollWidth>box.clientWidth) box.scrollLeft=box.scrollWidth;
+})();
+</script>
