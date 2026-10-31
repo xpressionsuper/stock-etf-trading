@@ -1,0 +1,88 @@
+thesis_id: th_gld_rev_20261031_a727
+ticker: GLD
+created_at: '2026-10-31T08:08:06+00:00'
+updated_at: '2026-10-31T08:08:13+00:00'
+thesis_type: mean_reversion
+setup_type: failed_breakdown_support_reclaim
+catalyst: null
+status: ENTRY_READY
+status_history:
+- status: IDEA
+  at: '2026-10-31T08:08:06+00:00'
+  reason: manually entered
+- status: ENTRY_READY
+  at: '2026-10-31T08:08:13+00:00'
+  reason: Gate GO; conditional buy-stop 367.50 resting until 2026-11-13
+thesis_statement: 'H-001: GLD broke 363-367 Jun-Jul support on 10/30 (close 355.78,
+  52w low). Buy-stop 367.50 only if price reclaims 366.6; stop 353.50 below 10/30
+  low; targets 380/390. Cancel if not triggered by 2026-11-13 or daily close < 353.50
+  before trigger; weekly close < 345 invalidates.'
+mechanism_tag: null
+evidence: []
+kill_criteria: []
+confidence: null
+confidence_score: null
+origin_fingerprint: 74eed65aafa8411e
+entry:
+  target_price: null
+  conditions: []
+  actual_price: null
+  actual_date: null
+exit:
+  stop_loss: 353.5
+  stop_loss_pct: null
+  take_profit: null
+  take_profit_rr: null
+  time_stop_days: null
+  actual_price: null
+  actual_date: null
+  exit_reason: null
+position:
+  shares: 54
+  shares_remaining: 54
+  position_value: 19845.0
+  risk_dollars: 756.0
+  risk_pct_of_account: 0.76
+  account_type: null
+  sizing_method: fixed_fractional
+  raw_source:
+    skill: position-sizer
+    file: reports/gld/position_sizer_2026-10-31_170748.json
+    fields:
+      final_recommended_shares: 54
+      final_position_value: 19845.0
+      final_risk_dollars: 756.0
+market_context: null
+monitoring:
+  review_interval_days: 30
+  next_review_date: '2026-11-30'
+  last_review_date: null
+  review_status: OK
+  triggers_config: []
+  alerts: []
+origin:
+  skill: manual
+  output_file: reports/gld/thesis_manual.json
+  screening_grade: null
+  screening_score: null
+  raw_provenance:
+    ticker: GLD
+    thesis_type: mean_reversion
+    setup_type: failed_breakdown_support_reclaim
+    thesis_statement: 'H-001: GLD broke 363-367 Jun-Jul support on 10/30 (close 355.78,
+      52w low). Buy-stop 367.50 only if price reclaims 366.6; stop 353.50 below 10/30
+      low; targets 380/390. Cancel if not triggered by 2026-11-13 or daily close <
+      353.50 before trigger; weekly close < 345 invalidates.'
+    stop_price: 353.5
+linked_reports:
+- skill: pre-trade-discipline-gate
+  file: reports\gld\pre_trade_discipline_decision_2026-10-31_080807.json
+  date: '2026-10-31'
+outcome:
+  pnl_dollars: null
+  pnl_pct: null
+  holding_days: null
+  mae_pct: null
+  mfe_pct: null
+  mae_mfe_source: null
+  lessons_learned: null

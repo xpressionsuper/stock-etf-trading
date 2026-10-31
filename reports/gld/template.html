@@ -1,0 +1,400 @@
+<title>GLD 지지대 이탈 점검</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 레이아웃: 어두운 '장 마감 후' 히어로 밴드에 주석 차트를 크게 깔고, 아래는 근거 → 실행 → 점검 순서의 리서치 노트 */
+:root{
+  --bg:#eef1f5; --surface:#ffffff; --sunk:#e4e9f0; --ink:#0f1a2a; --muted:#536075; --line:#d3dae4;
+  --accent:#1f4f8a; --good:#137044; --bad:#b8352a; --warn:#9a5f0c;
+  --good-t:rgba(19,112,68,.13); --bad-t:rgba(184,53,42,.11); --accent-t:rgba(31,79,138,.10);
+  /* 히어로는 두 테마 모두 '야간 시장' 톤으로 고정 */
+  --h-bg:#0c1522; --h-bg2:#13233a; --h-fg:#eef2f8; --h-muted:#9aa8bd; --h-line:rgba(154,168,189,.18);
+  --h-good:#5fd39a; --h-bad:#ff8b7b; --h-warn:#f2b45a; --h-accent:#8fbaf3;
+  --display:"Nanum Myeongjo","Batang",serif;
+  --sans:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a0f17; --surface:#111a26; --sunk:#0d1520; --ink:#e7ecf3; --muted:#95a2b6; --line:#223042;
+  --accent:#86b2ee; --good:#55c98d; --bad:#f2806f; --warn:#e9ad52;
+  --good-t:rgba(85,201,141,.15); --bad-t:rgba(242,128,111,.14); --accent-t:rgba(134,178,238,.12);
+  --h-bg:#070c14; --h-bg2:#0f1c2f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a0f17; --surface:#111a26; --sunk:#0d1520; --ink:#e7ecf3; --muted:#95a2b6; --line:#223042;
+  --accent:#86b2ee; --good:#55c98d; --bad:#f2806f; --warn:#e9ad52;
+  --good-t:rgba(85,201,141,.15); --bad-t:rgba(242,128,111,.14); --accent-t:rgba(134,178,238,.12);
+  --h-bg:#070c14; --h-bg2:#0f1c2f; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+::selection{background:var(--accent);color:var(--surface)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.num,td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.in{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- 히어로 ---------- */
+.hero{background:radial-gradient(120% 90% at 85% 0%,var(--h-bg2),var(--h-bg) 60%);color:var(--h-fg)}
+.hero .in{padding-block:44px 28px;display:grid;gap:26px}
+.hero-top{display:grid;grid-template-columns:1fr auto;gap:24px 40px;align-items:end}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.4vw,3.3rem);line-height:1.22;letter-spacing:-.01em;max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--h-bad)}
+.meta{color:var(--h-muted);font-size:.9rem;margin-top:14px}
+.meta b{color:var(--h-fg);font-weight:600}
+.quote{text-align:right;display:grid;gap:2px}
+.quote .px{font-family:var(--mono);font-size:clamp(2.4rem,5.5vw,4rem);font-weight:500;line-height:1;letter-spacing:-.03em}
+.quote .chg{font-family:var(--mono);color:var(--h-bad);font-size:1rem}
+.quote small{color:var(--h-muted);font-size:.8rem}
+.readout{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.82rem;color:var(--h-muted)}
+.readout b{font-family:var(--mono);color:var(--h-fg);font-weight:500}
+.readout i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:6px;border-radius:2px}
+.hchart{overflow-x:auto;margin-inline:-6px}
+.hchart svg:focus-visible{outline:2px solid var(--h-accent);outline-offset:4px}
+.hchart svg{display:block;width:100%;min-width:640px;height:auto;touch-action:pan-y}
+.h-grid{stroke:var(--h-line)}
+.h-ax{fill:var(--h-muted);font-family:var(--mono);font-size:11px}
+.h-lab{font-family:var(--sans);font-size:12.5px;font-weight:500}
+.h-g{fill:var(--h-good)}.h-r{fill:var(--h-bad)}
+.h-px{fill:none;stroke:var(--h-fg);stroke-width:2.2;stroke-linejoin:round}
+.h-ma50{fill:none;stroke:var(--h-accent);stroke-width:1.5}
+.h-ma200{fill:none;stroke:var(--h-warn);stroke-width:1.5;stroke-dasharray:6 4}
+.h-sup{fill:rgba(95,211,154,.17)}
+.h-gap{fill:rgba(255,139,123,.16);stroke:rgba(255,139,123,.5);stroke-dasharray:3 3}
+.h-trig{stroke:var(--h-good);stroke-dasharray:2 4}
+.h-stop{stroke:var(--h-bad);stroke-dasharray:2 4}
+.h-cross{stroke:var(--h-muted);stroke-width:1}
+.h-end{fill:var(--h-bad);stroke:var(--h-bg);stroke-width:2}
+
+.calls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--h-line)}
+.calls>div{padding:18px 20px 4px 0;display:grid;gap:4px;min-width:0}
+.calls>div+div{padding-left:20px;border-left:1px solid var(--h-line)}
+.calls span{font-size:.8rem;color:var(--h-muted)}
+.calls b{font-size:1.15rem;font-weight:600}
+.calls p{font-size:.85rem;color:var(--h-muted)}
+
+/* ---------- 본문 ---------- */
+main .in{display:grid;gap:72px;padding-block:56px 72px}
+section{display:grid;gap:22px;min-width:0}
+.sh{display:grid;gap:8px;max-width:68ch}
+.sh h2{font-family:var(--display);font-weight:800;font-size:clamp(1.45rem,2.6vw,1.95rem);line-height:1.3}
+.sh p{color:var(--muted)}
+.lede{font-size:1.08rem;max-width:62ch}
+.lede strong{font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-g{color:var(--good);background:var(--good-t)}.p-r{color:var(--bad);background:var(--bad-t)}
+.p-w{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}.p-a{color:var(--accent);background:var(--accent-t)}
+.g{color:var(--good)}.r{color:var(--bad)}.w{color:var(--warn)}.m{color:var(--muted)}
+
+/* 판단 블록 */
+.verdict{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:start}
+.holder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:8px}
+.holder h3{font-size:1rem}
+.holder p{color:var(--muted);font-size:.93rem}
+
+/* 기술 + 사다리 */
+.tech{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:40px;align-items:start}
+.facts{display:grid;gap:18px}
+.fact{display:grid;grid-template-columns:5.5em 1fr;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.fact:last-child{border-bottom:0}
+.fact dt{font-weight:700}
+.fact dd{margin:0;color:var(--muted)}
+.fact dd .num{color:var(--ink)}
+.ladder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 8px;overflow-x:auto}
+.ladder svg{display:block;width:100%;min-width:420px;height:auto}
+.l-axis{stroke:var(--line);stroke-width:2}
+.l-tick{stroke:var(--muted)}
+.l-ax{fill:var(--muted);font-family:var(--mono);font-size:11px}
+.l-risk{fill:var(--bad-t)}.l-rew{fill:var(--good-t)}
+.l-b-g{fill:var(--good)}.l-b-r{fill:var(--bad)}
+.l-lv{stroke-width:1.5}
+.l-lab{font-size:13px}
+.l-p{font-family:var(--mono);font-weight:600}
+.l-sub{fill:var(--muted)}
+.c-g{stroke:var(--good);fill:var(--good)}.c-r{stroke:var(--bad);fill:var(--bad)}.c-a{stroke:var(--accent);fill:var(--accent)}
+.c-f{stroke:var(--ink);fill:var(--ink)}.c-m{stroke:var(--muted);fill:var(--muted)}
+.l-r{fill:var(--bad);font-family:var(--mono);font-size:12px;font-weight:600}
+.l-w{fill:var(--good);font-family:var(--mono);font-size:12px;font-weight:600}
+.l-now{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+
+/* 매크로 */
+.gauge{display:grid;gap:10px;max-width:760px}
+.gtrack{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,var(--bad-t),var(--sunk) 45%,var(--good-t))}
+.gmark{position:absolute;top:-6px;width:3px;height:26px;border-radius:2px;background:var(--ink);transform:translateX(-50%)}
+.gmark.prev{background:var(--muted);opacity:.55}
+.gmark span{position:absolute;top:30px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.8rem;color:var(--muted)}
+.gmark.now span{color:var(--ink);font-weight:600}
+.gscale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--muted);padding-top:22px}
+.mtable{display:grid;gap:0;border-top:1px solid var(--line)}
+.mrow{display:grid;grid-template-columns:11em minmax(80px,1fr) 2.5em minmax(0,15em);gap:16px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.mname{display:grid}
+.mname span{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.mtrack{height:8px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.mtrack i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.mval{text-align:right;font-weight:600}
+.mnote{color:var(--muted);font-size:.88rem}
+
+/* 시나리오 */
+.split{display:flex;height:46px;border-radius:8px;overflow:hidden;font-family:var(--mono);font-weight:600}
+.split>div{display:flex;align-items:center;padding-inline:14px;color:var(--surface)}
+.s-bear{flex:40;background:var(--bad)}.s-base{flex:40;background:var(--warn)}.s-bull{flex:20;background:var(--good)}
+.scen{display:grid;grid-template-columns:40fr 40fr 20fr;gap:0}
+.scen article{padding:14px 18px 0 0;display:grid;gap:6px;align-content:start}
+.scen article+article{padding-left:18px;border-left:1px solid var(--line)}
+.scen h3{font-size:1rem}
+.scen p{color:var(--muted);font-size:.92rem}
+.axisnote{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+
+/* 가설 표 */
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:.8rem}
+tr:last-child td{border-bottom:0}
+tr.pick td{background:var(--good-t)}
+td.n{white-space:nowrap}
+.kill{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kill div{border-top:2px solid var(--bad);padding-top:10px;display:grid;gap:2px}
+.kill b{font-size:.95rem}
+.kill span{color:var(--muted);font-size:.88rem}
+
+/* 주문표 */
+.exec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+.ticket{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 12px 32px -18px rgba(15,26,42,.35)}
+.ticket header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 20px;background:var(--sunk);font-size:.82rem;color:var(--muted)}
+.ticket header b{color:var(--ink);font-family:var(--mono)}
+.ticket dl{margin:0;display:grid;grid-template-columns:auto 1fr;font-size:.93rem}
+.ticket dt,.ticket dd{padding:10px 20px;border-top:1px solid var(--line);margin:0}
+.ticket dt{color:var(--muted)}
+.ticket dd{font-variant-numeric:tabular-nums;text-align:right;font-weight:500}
+.ticket .tot{font-weight:700}
+.rules{display:grid;gap:14px}
+.rules p{color:var(--muted)}
+.rules strong{color:var(--ink)}
+
+/* 루프 */
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.loop>div{background:var(--surface);padding:16px 18px;display:grid;gap:6px;align-content:start;min-width:0}
+.loop .k{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.loop .pill{justify-self:start}
+.loop b{font-size:.95rem}
+.loop p{font-size:.84rem;color:var(--muted)}
+.loop .skip{background:var(--sunk)}
+
+footer{border-top:1px solid var(--line)}
+footer .in{padding-block:28px 40px;display:grid;gap:8px;font-size:.83rem;color:var(--muted);max-width:1080px}
+footer p{max-width:90ch}
+
+@media (max-width:860px){
+  .hero-top,.verdict,.tech,.exec{grid-template-columns:1fr}
+  .quote{text-align:left}
+  .loop{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mrow{grid-template-columns:8.5em minmax(60px,1fr) 2.2em}
+  .mnote{grid-column:1/-1;margin-top:-6px}
+}
+@media (max-width:560px){
+  .calls{grid-template-columns:1fr}
+  .calls>div+div{padding-left:0;border-left:0;border-top:1px solid var(--h-line)}
+  .calls>div{padding-bottom:14px}
+  .scen,.kill{grid-template-columns:1fr}
+  .scen article+article{padding-left:0;border-left:0;border-top:1px solid var(--line)}
+  .scen article{padding-bottom:12px}
+  .split>div{padding-inline:8px;font-size:.85rem}
+  .loop{grid-template-columns:1fr}
+}
+</style>
+
+<div class="hero">
+  <div class="in">
+    <div class="hero-top">
+      <div>
+        <h1>고점 대비 <em>-30%</em>, 넉 달 버틴 363 지지대마저 내줬다</h1>
+        <p class="meta"><b>GLD</b> SPDR Gold Shares · 2026-10-30 종가 기준 · 페이퍼 트레이딩 리포트</p>
+      </div>
+      <div class="quote">
+        <div class="px">355.78</div>
+        <div class="chg">1일 -3.5% · 5일 -3.0% · 21일 -7.1%</div>
+        <small>RSI(14) 30.3 · 10/30 거래량 16.2M (20일 평균의 2배) · 52주 최저</small>
+      </div>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span><b id="rd">2026-10-30 · 355.78</b></span>
+      <span><i style="background:var(--h-fg)"></i>종가</span>
+      <span><i style="background:var(--h-accent)"></i>50일선 390.6</span>
+      <span><i style="background:var(--h-warn)"></i>200일선 412.9</span>
+    </div>
+    <div class="hchart">{{HERO}}</div>
+    <div class="calls">
+      <div><span>지금</span><b>매수 보류</b><p>지지대가 깨진 다음 날 사지 않습니다</p></div>
+      <div><span>진입 조건</span><b class="num" style="color:var(--h-good)">367.50 역지정가</b><p>깨진 지지대 366.6을 되찾을 때만</p></div>
+      <div><span>무효화</span><b class="num" style="color:var(--h-bad)">발동 전 종가 353.5 이탈</b><p>또는 11/13까지 미발동 시 취소</p></div>
+    </div>
+  </div>
+</div>
+
+<main><div class="in">
+
+<section class="verdict">
+  <div class="sh">
+    <h2>하락 추세 속 지지대 이탈입니다. 367을 되찾는 경우에만 들어갑니다</h2>
+    <p class="lede">1월 고점 509.7 이후 고점이 여섯 번 연속 낮아졌고, 6~7월에 세 번 버틴 363~367 구간을 10/30에 평균 두 배 거래량으로 깼습니다. RSI 30은 과매도 문턱일 뿐 바닥 신호가 아닙니다. 그래서 지금은 사지 않고, <strong>깨진 지지대 위에 역지정가 매수</strong>를 걸어둡니다. 빠르게 되찾으면 이번 이탈은 매도자를 가둔 속임수였다는 뜻이고, 그렇지 않으면 주문은 체결되지 않고 끝납니다.</p>
+  </div>
+  <div class="holder">
+    <span><span class="pill p-w">이미 보유 중이라면</span></span>
+    <h3>363~367 반등 때 비중 축소, 주봉 345 이탈 시 정리</h3>
+    <p>깨진 지지대는 이제 저항입니다. 그 구간까지 반등하면 비중을 줄일 기회로 쓰고, 주봉 종가가 345를 밑돌면 남은 물량도 정리합니다. 추세가 돌아서기 전에는 물타기하지 않습니다.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>기술적 현황과 가격 사다리</h2>
+    <p>오른쪽 사다리는 실제 가격 축척입니다. 빨간 구간은 진입 후 감수하는 리스크(1R), 초록 구간은 목표 2까지의 보상입니다.</p>
+  </div>
+  <div class="tech">
+    <dl class="facts">
+      <div class="fact"><dt>추세</dt><dd>고점이 <span class="num">509.7 → 492.2 → 448.7 → 437.4 → 429.4 → 385.2</span>로 계속 낮아지는 하락 추세입니다. 20·50·200일선(<span class="num">375.8 / 390.6 / 412.9</span>) 모두 아래이고, 50일선이 200일선 아래에 있으며 200일선도 내려가고 있습니다.</dd></div>
+      <div class="fact"><dt>주봉</dt><dd>2주 연속 하락, 이번 주 <span class="num">-3.0%</span>로 <span class="num">355.8</span> 마감. 10주선 <span class="num">387.8</span>, 40주선 <span class="num">411.0</span> 아래이고 40주선은 9월 <span class="num">417</span>에서 꺾여 내려옵니다.</dd></div>
+      <div class="fact"><dt>모멘텀</dt><dd>RSI <span class="num">30.3</span>, MACD(12,26) <span class="num">-6.4</span>, ATR <span class="num">6.22</span>. 하루 평균 6달러씩 움직이므로 손절은 직전 저점 아래 구조적 위치에 둡니다.</dd></div>
+      <div class="fact"><dt>지지</dt><dd>363~367(<span class="num">6/24 363.32, 7/17 363.60, 7/29 366.53</span>)이 10/30에 깨졌습니다. 다음은 2025년 9~10월 돌파 구간 <span class="num">345~352</span>, 그 아래 <span class="num">336~339</span>입니다.</dd></div>
+      <div class="fact"><dt>거래량</dt><dd>하락 첫날 10/22 <span class="num">17.5M</span>, 이탈일 10/30 <span class="num">16.2M</span>으로 20일 평균 <span class="num">8.0M</span>의 두 배 수준입니다. 매도가 거래량을 동반해 나오고 있습니다.</dd></div>
+      <div class="fact"><dt>귀금속 전반</dt><dd>21일간 은(SLV) <span class="num">-18.9%</span>, 금광주(GDX) <span class="num">-11.1%</span>. 장기채(TLT)는 <span class="num">+5.3%</span> 올랐는데도 금이 빠졌습니다. 금리 하락이 금을 받쳐주지 못하고, 달러(UUP)는 200일선보다 <span class="num">3.8%</span> 위에 있습니다.</dd></div>
+    </dl>
+    <div class="ladder">{{LADDER}}</div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>매크로 국면: Transitional</h2>
+    <p>종합 46.8/100, 신뢰도 보통, 국면 전환 확률 40~60%. 8월 11일 Broadening(60.8)에서 한 단계 식었습니다.</p>
+  </div>
+  <div class="gauge" role="img" aria-label="매크로 종합 점수 46.8, 8월 11일 60.8">
+    <div class="gtrack">
+      <div class="gmark prev" style="left:60.8%"><span>8/11 · 60.8</span></div>
+      <div class="gmark now" style="left:46.8%"><span>현재 · 46.8</span></div>
+    </div>
+    <div class="gscale"><span>0</span><span>50</span><span>100</span></div>
+  </div>
+  <div class="mtable">{{MACRO}}</div>
+  <p class="m" style="max-width:68ch">GLD에 주는 의미: 여섯 지표 중 금을 직접 재는 것은 없습니다. 방어주 선호와 신용 경색은 보통 금에 우호적인데, 지금은 그 환경에서도 금이 빠지고 있습니다. 매크로가 금을 떠받치지 못한다는 뜻이라, 진입은 허용하되 가격이 먼저 반전을 증명해야 합니다.</p>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>향후 2~6주 시나리오</h2>
+    <p>가격 방향 순서로 놓았습니다. 왼쪽이 하락, 오른쪽이 상승입니다.</p>
+  </div>
+  <div style="display:grid;gap:8px">
+    <div class="split" role="img" aria-label="약세 40%, 기본 40%, 강세 20%">
+      <div class="s-bear">40%</div><div class="s-base">40%</div><div class="s-bull">20%</div>
+    </div>
+    <div class="axisnote"><span>← 336~352</span><span>345~367 박스</span><span>380~390 →</span></div>
+  </div>
+  <div class="scen">
+    <article><h3 class="r">약세 · 하락 연장</h3><p>345~352를 시험하고, 주봉 종가가 345 아래면 336~339까지 열립니다. 추세와 거래량이 이 쪽을 가리킵니다.</p></article>
+    <article><h3 class="w">기본 · 박스권 횡보</h3><p>345~367 사이에서 과매도를 풀며 옆으로 갑니다. 367 위 종가는 만들지 못합니다.</p></article>
+    <article><h3 class="g">강세 · 이탈 실패</h3><p>367을 빠르게 되찾으면 매도자가 갇히고 380~390(20·50일선)까지 되돌림이 나옵니다.</p></article>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>트레이드 가설</h2>
+    <p>세 가지를 세워 점수를 매겼고, 이탈 실패를 확인하고 들어가는 H-001만 채택했습니다.</p>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>ID</th><th>가설</th><th>점수</th><th>판정</th></tr>
+    <tr class="pick"><td class="n">H-001</td><td>10거래일 안에 366.6을 되찾으면 매수. 손절 353.50, 목표 380 / 390</td><td class="n">3.6</td><td><span class="pill p-g">채택</span></td></tr>
+    <tr><td class="n">H-003</td><td>345~352까지 내려와 반전일이 나오면 매수. 첫 저항 366까지 보상이 약 1R뿐</td><td class="n">2.7</td><td><span class="pill p-w">보류</span></td></tr>
+    <tr><td class="n">H-002</td><td>지금 355.8에서 바로 매수. 지지대가 깨진 다음 날 사는 셈</td><td class="n">2.6</td><td><span class="pill p-r">기각</span></td></tr>
+  </table></div>
+  <div class="kill">
+    <div><b>발동 전 종가 353.50 미만</b><span>주문 취소, 새 저점 기준으로 다시 계획</span></div>
+    <div><b>11/13까지 미발동</b><span>10거래일 경과 시 주문 취소 후 재점검</span></div>
+    <div><b>주봉 종가 345 미만</b><span>가설 폐기</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>실행 계획</h2>
+    <p>계좌 $100,000, 리스크 1% 기준으로 계산했지만 한 종목 비중 상한 20%에 걸려 수량이 줄었습니다.</p>
+  </div>
+  <div class="exec">
+    <div class="ticket">
+      <header><span>페이퍼 주문표</span><b>th_gld_rev_20261031_a727</b></header>
+      <dl>
+        <dt>종목</dt><dd class="num">GLD</dd>
+        <dt>주문 유형</dt><dd class="num">BUY STOP</dd>
+        <dt>트리거</dt><dd class="g num">367.50</dd>
+        <dt>수량</dt><dd>54주</dd>
+        <dt>손절</dt><dd class="r num">353.50</dd>
+        <dt>목표 1 / 2</dt><dd class="g num">380.00 / 390.00</dd>
+        <dt>유효 기간</dt><dd class="num">2026-11-13</dd>
+        <dt>포지션 금액</dt><dd>$19,845 (19.8%)</dd>
+        <dt class="tot">최대 손실</dt><dd class="tot r">$756 (0.76%)</dd>
+      </dl>
+    </div>
+    <div class="rules">
+      <p><strong>익절:</strong> 목표 1(380, 0.89R)에서 절반을 팔고 남은 물량의 손절을 진입가 367.50으로 올립니다. 목표 2(390, 1.61R, 50일선)에서 나머지를 정리합니다.</p>
+      <p><strong>시가 갭 주의:</strong> 시가가 372를 넘겨 열리면 리스크가 1R보다 커지므로 진입하지 않습니다.</p>
+      <p><strong>포트폴리오 리스크:</strong> 대기 중인 GOOG 주문($999)과 합쳐 최대 $1,755(1.76%)로 상한 6%보다 한참 낮습니다.</p>
+      <p><strong>체결 후:</strong> open-position으로 ACTIVE 전환, 청산 후 postmortem으로 복기합니다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>8단계 점검 루프</h2>
+    <p>순서대로 실행한 결과입니다. GO 판정은 367.50 역지정가 주문 계획에 대한 것입니다.</p>
+  </div>
+  <div class="loop">
+    <div><span class="k">1 · 매크로 국면</span><b>Transitional 46.8</b><p>신규 진입 허용, 확인 신호 필요</p></div>
+    <div><span class="k">2 · 기술적 분석</span><b>하락 추세, 지지대 이탈</b><p>트리거 367.50 / 무효 353.50</p></div>
+    <div class="skip"><span class="k">3 · 실적 점검</span><b>해당 없음</b><p>ETF라 실적 발표가 없음, 스크리닝도 생략(종목 지정)</p></div>
+    <div><span class="k">4 · 가설</span><b>H-001 채택</b><p>점수 3.6, kill 조건 3개</p></div>
+    <div><span class="k">5 · 사이징</span><b>54주 · $756</b><p>리스크 0.76% (비중 상한 20%)</p></div>
+    <div><span class="k">6 · 진입 게이트</span><span class="pill p-g">GO</span><p>계획·손절·수량·리스크 일치</p></div>
+    <div><span class="k">7 · 서킷브레이커</span><span class="pill p-g">TRADING_ALLOWED</span><p>청산 기록 없음</p></div>
+    <div><span class="k">8 · 트레이더 메모리</span><span class="pill p-a">ENTRY_READY</span><p>조건부 주문 대기</p></div>
+  </div>
+</section>
+
+</div></main>
+
+<footer><div class="in">
+  <p>데이터: GLD·SLV·GDX·TLT·UUP 일봉은 yfinance 기준입니다. 매크로 국면은 같은 날 13:54에 FMP 데이터로 계산한 결과를 그대로 썼습니다(10/30 금요일 마감 뒤 새 거래일이 없어 결과가 같습니다).</p>
+  <p>10/30 금 급락의 뉴스 원인은 확인하지 못했습니다(미확인). 이 리포트의 판단은 가격, 거래량, 관련 자산 흐름에만 근거합니다.</p>
+  <p>시나리오 확률과 지지 구간(345~352, 336~339)은 차트에 근거한 추정치입니다. 페이퍼 트레이딩 연습용이며 투자 권유가 아닙니다.</p>
+</div></footer>
+
+<script>
+(function(){
+  var S={{SERIES}}, G={{GEOM}};
+  var svg=document.getElementById('hc'), zone=document.getElementById('hz'),
+      cx=document.getElementById('hx'), dot=document.getElementById('hd'), rd=document.getElementById('rd');
+  if(!svg) return;
+  var X=function(k){return G.L+(G.W-G.L-G.R)*k/(G.N-1)},
+      Y=function(p){return G.T+(G.H-G.T-G.B)*(G.hi-p)/(G.hi-G.lo)};
+  function show(k){
+    var p=S[k]; cx.setAttribute('x1',X(k)); cx.setAttribute('x2',X(k)); cx.setAttribute('visibility','visible');
+    dot.setAttribute('cx',X(k)); dot.setAttribute('cy',Y(p[1])); rd.textContent=p[0]+' · '+p[1].toFixed(2);
+  }
+  function reset(){ cx.setAttribute('visibility','hidden'); show(G.N-1); cx.setAttribute('visibility','hidden'); }
+  zone.addEventListener('pointermove',function(e){
+    var r=svg.getBoundingClientRect(), x=(e.clientX-r.left)/r.width*G.W;
+    show(Math.max(0,Math.min(G.N-1,Math.round((x-G.L)/(G.W-G.L-G.R)*(G.N-1)))));
+  });
+  zone.addEventListener('pointerleave',reset);
+  var cur=G.N-1;
+  svg.addEventListener('keydown',function(e){
+    var d=e.key==='ArrowLeft'?-1:e.key==='ArrowRight'?1:0; if(!d) return;
+    e.preventDefault(); cur=Math.max(0,Math.min(G.N-1,cur+d)); show(cur);
+  });
+  svg.addEventListener('blur',reset);
+  var box=svg.parentElement; if(box.scrollWidth>box.clientWidth) box.scrollLeft=box.scrollWidth;
+})();
+</script>

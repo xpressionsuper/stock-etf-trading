@@ -1,0 +1,164 @@
+{
+ "hypotheses": [
+  {
+   "hypothesis_id": "H-001",
+   "title": "Failed breakdown: reclaim of broken 363-367 support",
+   "thesis": "If GLD closes back above 366.6 (broken Jun-Jul support and 10/23 close) within 10 sessions, the 10/30 breakdown was a bear trap and price retraces to the 385-390 resistance (Oct highs, SMA50).",
+   "problem_target": "Avoid buying a fresh breakdown while capturing a quick failed-breakdown reversal",
+   "mechanism": "Breakdown below a 3-touch support traps late sellers; a fast reclaim forces covering back toward the last swing highs.",
+   "evidence_basis": [
+    "363.3/363.6/366.5 held three times Jun-Jul 2026",
+    "RSI14 30 near oversold",
+    "Breakdown volume 2x average marks a likely flush"
+   ],
+   "proposed_rule_changes": [
+    {
+     "component": "entry_logic",
+     "change": "Buy-stop 367.50 (above 366.6), valid 10 sessions to 2026-11-13"
+    },
+    {
+     "component": "exit_logic",
+     "change": "Stop 353.50 (below 10/30 low 354.67); T1 380, T2 390"
+    }
+   ],
+   "expected_impact": "About 1.6R to T2 with structural invalidation",
+   "key_risks": [
+    "Primary trend is down with a falling SMA200",
+    "Precious-metals-wide liquidation can continue",
+    "385-390 is heavy overhead supply"
+   ],
+   "kill_criteria": [
+    "Close below 353.50 before trigger -> cancel order and re-plan",
+    "No trigger by 2026-11-13 -> cancel",
+    "Weekly close below 345 -> thesis invalid"
+   ],
+   "minimum_viable_experiment": {
+    "goal": "Paper-trade single instance",
+    "setup": "Resting buy-stop 367.50, stop 353.50",
+    "metrics": [
+     "R multiple",
+     "MAE/MFE"
+    ],
+    "sample_size": "1 trade (journal)",
+    "duration": "2-6 weeks"
+   },
+   "score_components": {
+    "evidence_strength": 3,
+    "mechanism_clarity": 4,
+    "feasibility": 5,
+    "expected_payoff": 3,
+    "novelty": 2,
+    "test_efficiency": 4
+   },
+   "priority_score": 0,
+   "recommendation": "pursue",
+   "rationale": "Waits for proof the breakdown failed; structural stop under the 10/30 low.",
+   "confidence": "medium-low",
+   "assumptions": [
+    "Breakdown below 363 was a liquidity flush, not a new leg"
+   ],
+   "dependencies": [
+    "Daily close data"
+   ]
+  },
+  {
+   "hypothesis_id": "H-002",
+   "title": "Buy now at 355.8 near 52-week low",
+   "thesis": "Oversold RSI 30 near the 345-352 zone means GLD bounces from here.",
+   "problem_target": "Capture the low directly",
+   "mechanism": "Mean reversion from oversold",
+   "evidence_basis": [
+    "RSI14 30.3"
+   ],
+   "proposed_rule_changes": [
+    {
+     "component": "entry_logic",
+     "change": "Market buy 355.8, stop 343"
+    }
+   ],
+   "expected_impact": "Unclear; no confirmation",
+   "key_risks": [
+    "Catching a falling knife right after a support break",
+    "No higher low yet"
+   ],
+   "kill_criteria": [
+    "Close below 343"
+   ],
+   "minimum_viable_experiment": {
+    "goal": "n/a",
+    "setup": "n/a",
+    "metrics": [
+     "R multiple"
+    ],
+    "sample_size": "1",
+    "duration": "2 weeks"
+   },
+   "score_components": {
+    "evidence_strength": 2,
+    "mechanism_clarity": 2,
+    "feasibility": 5,
+    "expected_payoff": 2,
+    "novelty": 1,
+    "test_efficiency": 3
+   },
+   "priority_score": 0,
+   "recommendation": "reject",
+   "rationale": "No confirmation; buying the day after a support break.",
+   "confidence": "low",
+   "assumptions": [],
+   "dependencies": []
+  },
+  {
+   "hypothesis_id": "H-003",
+   "title": "Support test 345-352 with bullish reversal day",
+   "thesis": "If GLD tags 345-352 (Sep-Oct 2025 breakout) and prints a reversal day closing above its open and prior high, a bounce toward 366 follows.",
+   "problem_target": "Second chance entry if H-001 never triggers",
+   "mechanism": "Old breakout zone acting as support",
+   "evidence_basis": [
+    "Sep 29-Oct 3 2025 gap-up area 351-356",
+    "Sep 23-25 2025 base 342-348"
+   ],
+   "proposed_rule_changes": [
+    {
+     "component": "entry_logic",
+     "change": "Buy-stop above reversal-day high after a 345-352 test"
+    }
+   ],
+   "expected_impact": "About 1R to the 366 retest; poor payoff",
+   "key_risks": [
+    "Downtrend continuation to 336-339",
+    "Low reward to first resistance"
+   ],
+   "kill_criteria": [
+    "Close below 343"
+   ],
+   "minimum_viable_experiment": {
+    "goal": "Watch only",
+    "setup": "Wait for test",
+    "metrics": [
+     "R multiple"
+    ],
+    "sample_size": "1",
+    "duration": "2-6 weeks"
+   },
+   "score_components": {
+    "evidence_strength": 2,
+    "mechanism_clarity": 3,
+    "feasibility": 4,
+    "expected_payoff": 2,
+    "novelty": 2,
+    "test_efficiency": 3
+   },
+   "priority_score": 0,
+   "recommendation": "park",
+   "rationale": "Valid only if price reaches 345-352; payoff about 1R to the first resistance.",
+   "confidence": "medium",
+   "assumptions": [
+    "345-352 acts as support"
+   ],
+   "dependencies": [
+    "Daily close data"
+   ]
+  }
+ ]
+}

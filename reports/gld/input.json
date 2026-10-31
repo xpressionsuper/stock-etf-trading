@@ -1,0 +1,9 @@
+{
+  "objective": {"goal": "Decide whether GLD offers a long entry after breaking its June-July support", "focus_area": "Entry trigger and invalidation after a support breakdown", "horizon": "2-6 weeks"},
+  "strategy_context": {"strategy_name": "gld_support_reclaim", "summary": "Long-only paper account. Buy only on confirmation, never into a falling market.", "known_pain_points": ["Buying a breakdown too early", "Stops placed inside daily noise (ATR 6.2)"]},
+  "constraints": {"execution_constraints": ["Regular session only", "Long-only cash ETF"], "risk_constraints": ["risk_per_trade <= 1.0%", "max single-position size 20%", "portfolio heat <= 6%"], "data_constraints": ["Daily bars via yfinance"]},
+  "market_context": {"summary": "Macro Transitional 46.8 (Contraction->Concentration). GLD down 30% from 2026-01-29 high 509.7; 10/30 close 355.78 is a 52-week low after breaking 363-366 support on 2x volume. Silver -19% and GDX -11% in 21 days while TLT +5%: precious-metals-wide selling despite falling yields. Dollar (UUP) 3.8% above its 200d.", "regime_tags": ["transitional", "precious_metals_downtrend"], "observations": ["Lower highs since Jan: 509.7, 492.2, 448.7, 437.4, 429.4, 385.2", "Support 363.3/363.6/366.5 (Jun-Jul) broken 10/30, volume 16.2M vs 8.0M 20d avg", "SMA20/50/200 375.8/390.6/412.9, 50<200 and 200 falling", "RSI14 30.3, ATR14 6.22, MACD -6.4", "Next support 345-352 (Sep-Oct 2025 breakout), then 336-339"]},
+  "performance_summary": {"win_rate": 0.0, "profit_factor": 0.0, "max_drawdown": 0.0},
+  "trade_log_summary": {"common_winner_traits": [], "common_loser_traits": []},
+  "feature_inventory": ["close", "sma20", "sma50", "sma200", "rsi14", "atr14", "volume_ratio"]
+}

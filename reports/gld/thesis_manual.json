@@ -1,0 +1,3 @@
+{"ticker": "GLD", "thesis_type": "mean_reversion", "setup_type": "failed_breakdown_support_reclaim",
+ "thesis_statement": "H-001: GLD broke 363-367 Jun-Jul support on 10/30 (close 355.78, 52w low). Buy-stop 367.50 only if price reclaims 366.6; stop 353.50 below 10/30 low; targets 380/390. Cancel if not triggered by 2026-11-13 or daily close < 353.50 before trigger; weekly close < 345 invalidates.",
+ "stop_price": 353.50}
