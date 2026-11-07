@@ -1,0 +1,62 @@
+{
+ "objective": {
+  "goal": "Decide whether to add direct gold (futures) exposure on top of the active GLD long",
+  "focus_area": "Correlated exposure and entry after a failed breakdown",
+  "horizon": "2-6 weeks"
+ },
+ "strategy_context": {
+  "strategy_name": "gold_failed_breakdown",
+  "summary": "Paper account $100k. Already long GLD 54 sh @369.58 (stop 353.50, risk $868 = 0.87%), the same underlying.",
+  "known_pain_points": [
+   "Doubling exposure to one underlying",
+   "Futures contract size vs small risk budget"
+  ]
+ },
+ "constraints": {
+  "execution_constraints": [
+   "Long-only",
+   "Futures only via micro contracts"
+  ],
+  "risk_constraints": [
+   "risk_per_trade <= 1.0%",
+   "combined risk on one underlying <= 1.5%",
+   "portfolio heat <= 6%"
+  ],
+  "data_constraints": [
+   "Daily GC=F continuous futures via yfinance; COT unavailable on free FMP"
+  ]
+ },
+ "market_context": {
+  "summary": "Macro Contraction 55.4 (HIGH confidence, late-cycle: credit tightening, defensive rotation). Gold -27% from 2026-01-29 high 5586. 10/30 broke Jun-Jul 3955-3994 support (low 3879, close 3899), then this week reclaimed it: +4.5% to 4074.9 (spot ~4069). Friday rejected 4116 under 4091-4156 resistance.",
+  "regime_tags": [
+   "contraction",
+   "gold_downtrend",
+   "failed_breakdown"
+  ],
+  "observations": [
+   "Lower highs 5586/5434/4918/4783/4755/4242",
+   "SMA20/50/200 4081/4230/4502, SMA200 falling",
+   "RSI 47, MACD -53 above signal -65 (bullish cross)",
+   "ATR14 86.6",
+   "Resistance 4091-4156 (old Sep-Oct lows, 11/5 high), 4230-4242 (SMA50, Oct high)",
+   "Support 3955-4000, 3879 (10/30 low), then 3750-3850 (Sep-Oct 2025)"
+  ]
+ },
+ "performance_summary": {
+  "win_rate": 0.0,
+  "profit_factor": 0.0,
+  "max_drawdown": 0.0
+ },
+ "trade_log_summary": {
+  "common_winner_traits": [],
+  "common_loser_traits": []
+ },
+ "feature_inventory": [
+  "close",
+  "sma20",
+  "sma50",
+  "sma200",
+  "rsi14",
+  "atr14"
+ ]
+}

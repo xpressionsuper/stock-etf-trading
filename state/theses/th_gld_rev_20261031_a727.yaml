@@ -1,11 +1,11 @@
 thesis_id: th_gld_rev_20261031_a727
 ticker: GLD
 created_at: '2026-10-31T08:08:06+00:00'
-updated_at: '2026-10-31T08:08:13+00:00'
+updated_at: '2026-11-07T08:43:36+00:00'
 thesis_type: mean_reversion
 setup_type: failed_breakdown_support_reclaim
 catalyst: null
-status: ENTRY_READY
+status: ACTIVE
 status_history:
 - status: IDEA
   at: '2026-10-31T08:08:06+00:00'
@@ -13,6 +13,9 @@ status_history:
 - status: ENTRY_READY
   at: '2026-10-31T08:08:13+00:00'
   reason: Gate GO; conditional buy-stop 367.50 resting until 2026-11-13
+- status: ACTIVE
+  at: '2026-11-04T00:00:00+00:00'
+  reason: position opened
 thesis_statement: 'H-001: GLD broke 363-367 Jun-Jul support on 10/30 (close 355.78,
   52w low). Buy-stop 367.50 only if price reclaims 366.6; stop 353.50 below 10/30
   low; targets 380/390. Cancel if not triggered by 2026-11-13 or daily close < 353.50
@@ -26,8 +29,8 @@ origin_fingerprint: 74eed65aafa8411e
 entry:
   target_price: null
   conditions: []
-  actual_price: null
-  actual_date: null
+  actual_price: 369.58
+  actual_date: '2026-11-04T00:00:00+00:00'
 exit:
   stop_loss: 353.5
   stop_loss_pct: null
@@ -38,7 +41,7 @@ exit:
   actual_date: null
   exit_reason: null
 position:
-  shares: 54
+  shares: 54.0
   shares_remaining: 54
   position_value: 19845.0
   risk_dollars: 756.0

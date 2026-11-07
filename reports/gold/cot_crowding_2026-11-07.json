@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0",
+  "skill": "cot-contrarian-detector",
+  "run_context": {
+    "schema_version": "1.0",
+    "skill": "cot-contrarian-detector",
+    "generated_at": "2026-11-07 17:44:33",
+    "as_of": "2026-11-07",
+    "data_date": null,
+    "universe_mode": "explicit_symbols",
+    "universe_size": 1,
+    "params": {
+      "lookback_weeks": 156,
+      "short_lookback_weeks": 26,
+      "threshold_high": 90.0,
+      "threshold_low": 10.0
+    }
+  },
+  "markets": [],
+  "skipped": [
+    {
+      "symbol": "GC",
+      "status": "skipped",
+      "reason": "API fetch failed: HTTP 402 - Restricted Endpoint: This endpoint is not available under your current subscription please visit our subscription page to upgrade your plan at https://financialmodelingprep.com/",
+      "weeks_available": 0
+    }
+  ]
+}

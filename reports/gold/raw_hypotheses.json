@@ -1,0 +1,160 @@
+{
+ "hypotheses": [
+  {
+   "hypothesis_id": "H-001",
+   "title": "Keep GLD as the only gold exposure; manage it on gold levels",
+   "thesis": "The 10/30 break below 3955 failed and gold reclaimed 4000; the open GLD long already expresses this. Take GLD T1 (380 ~ gold 4160) on a test of 4091-4156 and move the stop to breakeven.",
+   "problem_target": "Avoid stacking correlated risk",
+   "mechanism": "Failed breakdown traps sellers; first resistance at old support 4091-4156",
+   "evidence_basis": [
+    "Reclaim of 3955-4000 within 3 sessions",
+    "MACD bullish cross",
+    "Week +4.5%"
+   ],
+   "proposed_rule_changes": [
+    {
+     "component": "exit_logic",
+     "change": "GLD: sell half at 380, stop to 369.58; full exit on gold close < 3870 (GLD 353.50)"
+    }
+   ],
+   "expected_impact": "Locks in the trade the plan already holds",
+   "key_risks": [
+    "Rejection at 4091-4156 sends gold back to 3880",
+    "Falling SMA200"
+   ],
+   "kill_criteria": [
+    "Gold daily close < 3870 (GLD stop 353.50)",
+    "Weekly close < 3880"
+   ],
+   "minimum_viable_experiment": {
+    "goal": "Paper journal",
+    "setup": "Existing GLD position",
+    "metrics": [
+     "R multiple",
+     "MAE/MFE"
+    ],
+    "sample_size": "1",
+    "duration": "2-6 weeks"
+   },
+   "score_components": {
+    "evidence_strength": 4,
+    "mechanism_clarity": 4,
+    "feasibility": 5,
+    "expected_payoff": 3,
+    "novelty": 2,
+    "test_efficiency": 5
+   },
+   "recommendation": "pursue",
+   "rationale": "No new risk; uses the open position",
+   "confidence": "medium",
+   "assumptions": [
+    "GLD tracks gold at ~1/10.95"
+   ],
+   "dependencies": [
+    "Daily close data"
+   ],
+   "priority_score": 0
+  },
+  {
+   "hypothesis_id": "H-002",
+   "title": "Add MGC on pullback to 3990-4000",
+   "thesis": "If gold pulls back to 3990-4000 and holds, add 1 MGC with stop 3870, targets 4156/4240.",
+   "problem_target": "Second entry with better R:R",
+   "mechanism": "Reclaimed support retest",
+   "evidence_basis": [
+    "3955-4000 held Jun-Jul three times"
+   ],
+   "proposed_rule_changes": [
+    {
+     "component": "entry_logic",
+     "change": "Buy limit 4000, stop 3870"
+    }
+   ],
+   "expected_impact": "1.2R / 1.85R",
+   "key_risks": [
+    "1 MGC risks $1,300 > $630 remaining gold budget",
+    "Correlated with GLD"
+   ],
+   "kill_criteria": [
+    "Close < 3870"
+   ],
+   "minimum_viable_experiment": {
+    "goal": "Paper journal",
+    "setup": "Limit 4000",
+    "metrics": [
+     "R multiple",
+     "MAE/MFE"
+    ],
+    "sample_size": "1",
+    "duration": "2-6 weeks"
+   },
+   "score_components": {
+    "evidence_strength": 3,
+    "mechanism_clarity": 4,
+    "feasibility": 1,
+    "expected_payoff": 3,
+    "novelty": 2,
+    "test_efficiency": 3
+   },
+   "recommendation": "park",
+   "rationale": "Sizer NO_TRADE: risk_below_one_contract",
+   "confidence": "medium-low",
+   "assumptions": [
+    "3955-4000 now support"
+   ],
+   "dependencies": [
+    "Daily close data"
+   ],
+   "priority_score": 0
+  },
+  {
+   "hypothesis_id": "H-003",
+   "title": "Add MGC on breakout above 4160",
+   "thesis": "A close above 4156 opens 4240-4330; buy-stop 4165, stop 4030.",
+   "problem_target": "Momentum add",
+   "mechanism": "Breakout over 11/5 high",
+   "evidence_basis": [
+    "Week range expansion"
+   ],
+   "proposed_rule_changes": [
+    {
+     "component": "entry_logic",
+     "change": "Buy-stop 4165, stop 4030"
+    }
+   ],
+   "expected_impact": "0.56R to 4240, 1.22R to 4330",
+   "key_risks": [
+    "Overhead SMA50 4230",
+    "Correlated with GLD",
+    "Poor R:R"
+   ],
+   "kill_criteria": [
+    "Close < 4030"
+   ],
+   "minimum_viable_experiment": {
+    "goal": "Paper journal",
+    "setup": "Buy-stop 4165",
+    "metrics": [
+     "R multiple",
+     "MAE/MFE"
+    ],
+    "sample_size": "1",
+    "duration": "2-6 weeks"
+   },
+   "score_components": {
+    "evidence_strength": 2,
+    "mechanism_clarity": 3,
+    "feasibility": 1,
+    "expected_payoff": 2,
+    "novelty": 2,
+    "test_efficiency": 3
+   },
+   "recommendation": "reject",
+   "rationale": "Thin reward into SMA50 and over budget",
+   "confidence": "low",
+   "assumptions": [],
+   "dependencies": [],
+   "priority_score": 0
+  }
+ ]
+}

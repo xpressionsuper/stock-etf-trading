@@ -1,0 +1,397 @@
+<title>금 이탈 실패 점검</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 레이아웃: 어두운 '장 마감 후' 히어로 밴드에 주석 차트를 크게 깔고, 아래는 근거 → 실행 → 점검 순서의 리서치 노트 */
+:root{
+  --bg:#eef1f5; --surface:#ffffff; --sunk:#e4e9f0; --ink:#0f1a2a; --muted:#536075; --line:#d3dae4;
+  --accent:#1f4f8a; --good:#137044; --bad:#b8352a; --warn:#9a5f0c;
+  --good-t:rgba(19,112,68,.13); --bad-t:rgba(184,53,42,.11); --accent-t:rgba(31,79,138,.10);
+  /* 히어로는 두 테마 모두 '야간 시장' 톤으로 고정 */
+  --h-bg:#0c1522; --h-bg2:#13233a; --h-fg:#eef2f8; --h-muted:#9aa8bd; --h-line:rgba(154,168,189,.18);
+  --h-good:#5fd39a; --h-bad:#ff8b7b; --h-warn:#f2b45a; --h-accent:#8fbaf3;
+  --display:"Nanum Myeongjo","Batang",serif;
+  --sans:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a0f17; --surface:#111a26; --sunk:#0d1520; --ink:#e7ecf3; --muted:#95a2b6; --line:#223042;
+  --accent:#86b2ee; --good:#55c98d; --bad:#f2806f; --warn:#e9ad52;
+  --good-t:rgba(85,201,141,.15); --bad-t:rgba(242,128,111,.14); --accent-t:rgba(134,178,238,.12);
+  --h-bg:#070c14; --h-bg2:#0f1c2f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a0f17; --surface:#111a26; --sunk:#0d1520; --ink:#e7ecf3; --muted:#95a2b6; --line:#223042;
+  --accent:#86b2ee; --good:#55c98d; --bad:#f2806f; --warn:#e9ad52;
+  --good-t:rgba(85,201,141,.15); --bad-t:rgba(242,128,111,.14); --accent-t:rgba(134,178,238,.12);
+  --h-bg:#070c14; --h-bg2:#0f1c2f; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+::selection{background:var(--accent);color:var(--surface)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.num,td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.in{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- 히어로 ---------- */
+.hero{background:radial-gradient(120% 90% at 85% 0%,var(--h-bg2),var(--h-bg) 60%);color:var(--h-fg)}
+.hero .in{padding-block:44px 28px;display:grid;gap:26px}
+.hero-top{display:grid;grid-template-columns:1fr auto;gap:24px 40px;align-items:end}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.4vw,3.3rem);line-height:1.22;letter-spacing:-.01em;max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--h-bad)}
+.meta{color:var(--h-muted);font-size:.9rem;margin-top:14px}
+.meta b{color:var(--h-fg);font-weight:600}
+.quote{text-align:right;display:grid;gap:2px}
+.quote .px{font-family:var(--mono);font-size:clamp(2.4rem,5.5vw,4rem);font-weight:500;line-height:1;letter-spacing:-.03em}
+.quote .chg{font-family:var(--mono);color:var(--h-bad);font-size:1rem}
+.quote small{color:var(--h-muted);font-size:.8rem}
+.readout{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.82rem;color:var(--h-muted)}
+.readout b{font-family:var(--mono);color:var(--h-fg);font-weight:500}
+.readout i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:6px;border-radius:2px}
+.hchart{overflow-x:auto;margin-inline:-6px}
+.hchart svg:focus-visible{outline:2px solid var(--h-accent);outline-offset:4px}
+.hchart svg{display:block;width:100%;min-width:640px;height:auto;touch-action:pan-y}
+.h-grid{stroke:var(--h-line)}
+.h-ax{fill:var(--h-muted);font-family:var(--mono);font-size:11px}
+.h-lab{font-family:var(--sans);font-size:12.5px;font-weight:500}
+.h-g{fill:var(--h-good)}.h-r{fill:var(--h-bad)}
+.h-px{fill:none;stroke:var(--h-fg);stroke-width:2.2;stroke-linejoin:round}
+.h-ma50{fill:none;stroke:var(--h-accent);stroke-width:1.5}
+.h-ma200{fill:none;stroke:var(--h-warn);stroke-width:1.5;stroke-dasharray:6 4}
+.h-sup{fill:rgba(95,211,154,.17)}
+.h-gap{fill:rgba(255,139,123,.16);stroke:rgba(255,139,123,.5);stroke-dasharray:3 3}
+.h-trig{stroke:var(--h-good);stroke-dasharray:2 4}
+.h-stop{stroke:var(--h-bad);stroke-dasharray:2 4}
+.h-cross{stroke:var(--h-muted);stroke-width:1}
+.h-end{fill:var(--h-bad);stroke:var(--h-bg);stroke-width:2}
+
+.calls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--h-line)}
+.calls>div{padding:18px 20px 4px 0;display:grid;gap:4px;min-width:0}
+.calls>div+div{padding-left:20px;border-left:1px solid var(--h-line)}
+.calls span{font-size:.8rem;color:var(--h-muted)}
+.calls b{font-size:1.15rem;font-weight:600}
+.calls p{font-size:.85rem;color:var(--h-muted)}
+
+/* ---------- 본문 ---------- */
+main .in{display:grid;gap:72px;padding-block:56px 72px}
+section{display:grid;gap:22px;min-width:0}
+.sh{display:grid;gap:8px;max-width:68ch}
+.sh h2{font-family:var(--display);font-weight:800;font-size:clamp(1.45rem,2.6vw,1.95rem);line-height:1.3}
+.sh p{color:var(--muted)}
+.lede{font-size:1.08rem;max-width:62ch}
+.lede strong{font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-g{color:var(--good);background:var(--good-t)}.p-r{color:var(--bad);background:var(--bad-t)}
+.p-w{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}.p-a{color:var(--accent);background:var(--accent-t)}
+.g{color:var(--good)}.r{color:var(--bad)}.w{color:var(--warn)}.m{color:var(--muted)}
+
+/* 판단 블록 */
+.verdict{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:start}
+.holder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:8px}
+.holder h3{font-size:1rem}
+.holder p{color:var(--muted);font-size:.93rem}
+
+/* 기술 + 사다리 */
+.tech{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:40px;align-items:start}
+.facts{display:grid;gap:18px}
+.fact{display:grid;grid-template-columns:5.5em 1fr;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.fact:last-child{border-bottom:0}
+.fact dt{font-weight:700}
+.fact dd{margin:0;color:var(--muted)}
+.fact dd .num{color:var(--ink)}
+.ladder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 8px;overflow-x:auto}
+.ladder svg{display:block;width:100%;min-width:420px;height:auto}
+.l-axis{stroke:var(--line);stroke-width:2}
+.l-tick{stroke:var(--muted)}
+.l-ax{fill:var(--muted);font-family:var(--mono);font-size:11px}
+.l-risk{fill:var(--bad-t)}.l-rew{fill:var(--good-t)}
+.l-b-g{fill:var(--good)}.l-b-r{fill:var(--bad)}
+.l-lv{stroke-width:1.5}
+.l-lab{font-size:13px}
+.l-p{font-family:var(--mono);font-weight:600}
+.l-sub{fill:var(--muted)}
+.c-g{stroke:var(--good);fill:var(--good)}.c-r{stroke:var(--bad);fill:var(--bad)}.c-a{stroke:var(--accent);fill:var(--accent)}
+.c-f{stroke:var(--ink);fill:var(--ink)}.c-m{stroke:var(--muted);fill:var(--muted)}
+.l-r{fill:var(--bad);font-family:var(--mono);font-size:12px;font-weight:600}
+.l-w{fill:var(--good);font-family:var(--mono);font-size:12px;font-weight:600}
+.l-now{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+
+/* 매크로 */
+.gauge{display:grid;gap:10px;max-width:760px}
+.gtrack{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,var(--bad-t),var(--sunk) 45%,var(--good-t))}
+.gmark{position:absolute;top:-6px;width:3px;height:26px;border-radius:2px;background:var(--ink);transform:translateX(-50%)}
+.gmark.prev{background:var(--muted);opacity:.55}
+.gmark span{position:absolute;top:30px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.8rem;color:var(--muted)}
+.gmark.now span{color:var(--ink);font-weight:600}
+.gscale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--muted);padding-top:22px}
+.mtable{display:grid;gap:0;border-top:1px solid var(--line)}
+.mrow{display:grid;grid-template-columns:11em minmax(80px,1fr) 2.5em minmax(0,15em);gap:16px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.mname{display:grid}
+.mname span{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.mtrack{height:8px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.mtrack i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.mval{text-align:right;font-weight:600}
+.mnote{color:var(--muted);font-size:.88rem}
+
+/* 시나리오 */
+.split{display:flex;height:46px;border-radius:8px;overflow:hidden;font-family:var(--mono);font-weight:600}
+.split>div{display:flex;align-items:center;padding-inline:14px;color:var(--surface)}
+.s-bear{flex:30;background:var(--bad)}.s-base{flex:40;background:var(--warn)}.s-bull{flex:30;background:var(--good)}
+.scen{display:grid;grid-template-columns:30fr 40fr 30fr;gap:0}
+.scen article{padding:14px 18px 0 0;display:grid;gap:6px;align-content:start}
+.scen article+article{padding-left:18px;border-left:1px solid var(--line)}
+.scen h3{font-size:1rem}
+.scen p{color:var(--muted);font-size:.92rem}
+.axisnote{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+
+/* 가설 표 */
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:.8rem}
+tr:last-child td{border-bottom:0}
+tr.pick td{background:var(--good-t)}
+td.n{white-space:nowrap}
+.kill{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kill div{border-top:2px solid var(--bad);padding-top:10px;display:grid;gap:2px}
+.kill b{font-size:.95rem}
+.kill span{color:var(--muted);font-size:.88rem}
+
+/* 주문표 */
+.exec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+.ticket{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 12px 32px -18px rgba(15,26,42,.35)}
+.ticket header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 20px;background:var(--sunk);font-size:.82rem;color:var(--muted)}
+.ticket header b{color:var(--ink);font-family:var(--mono)}
+.ticket dl{margin:0;display:grid;grid-template-columns:auto 1fr;font-size:.93rem}
+.ticket dt,.ticket dd{padding:10px 20px;border-top:1px solid var(--line);margin:0}
+.ticket dt{color:var(--muted)}
+.ticket dd{font-variant-numeric:tabular-nums;text-align:right;font-weight:500}
+.ticket .tot{font-weight:700}
+.rules{display:grid;gap:14px}
+.rules p{color:var(--muted)}
+.rules strong{color:var(--ink)}
+
+/* 루프 */
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.loop>div{background:var(--surface);padding:16px 18px;display:grid;gap:6px;align-content:start;min-width:0}
+.loop .k{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.loop .pill{justify-self:start}
+.loop b{font-size:.95rem}
+.loop p{font-size:.84rem;color:var(--muted)}
+.loop .skip{background:var(--sunk)}
+
+footer{border-top:1px solid var(--line)}
+footer .in{padding-block:28px 40px;display:grid;gap:8px;font-size:.83rem;color:var(--muted);max-width:1080px}
+footer p{max-width:90ch}
+
+@media (max-width:860px){
+  .hero-top,.verdict,.tech,.exec{grid-template-columns:1fr}
+  .quote{text-align:left}
+  .loop{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mrow{grid-template-columns:8.5em minmax(60px,1fr) 2.2em}
+  .mnote{grid-column:1/-1;margin-top:-6px}
+}
+@media (max-width:560px){
+  .calls{grid-template-columns:1fr}
+  .calls>div+div{padding-left:0;border-left:0;border-top:1px solid var(--h-line)}
+  .calls>div{padding-bottom:14px}
+  .scen,.kill{grid-template-columns:1fr}
+  .scen article+article{padding-left:0;border-left:0;border-top:1px solid var(--line)}
+  .scen article{padding-bottom:12px}
+  .split>div{padding-inline:8px;font-size:.85rem}
+  .loop{grid-template-columns:1fr}
+}
+</style>
+
+<div class="hero">
+  <div class="in">
+    <div class="hero-top">
+      <div>
+        <h1>3,880 이탈은 <em>속임수</em>였다. 이제 4,160 저항 앞에 섰다</h1>
+        <p class="meta"><b>금</b> COMEX 금 선물 연속물(GC=F) · 달러/온스 · 2026-11-06 종가 기준 · 페이퍼 트레이딩 리포트</p>
+      </div>
+      <div class="quote">
+        <div class="px">4,074.9</div>
+        <div class="chg" style="color:var(--h-good)">5일 +4.5% · 1일 -0.9% · 21일 -2.0%</div>
+        <small>현물(XAU/USD) ≈ 4,069 · RSI(14) 47.2 · 1월 고점 5,586 대비 -27%</small>
+      </div>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span><b id="rd">2026-11-06 · 4074.9</b></span>
+      <span><i style="background:var(--h-fg)"></i>종가</span>
+      <span><i style="background:var(--h-accent)"></i>50일선 4,230</span>
+      <span><i style="background:var(--h-warn)"></i>200일선 4,502</span>
+    </div>
+    <div class="hchart"><svg id="hc" tabindex="0" viewBox="0 0 1000 380" role="img" aria-label="금 선물 최근 130거래일 종가 차트. 좌우 화살표 키로 날짜별 종가를 확인합니다"><line x1="48" x2="984" y1="313.1" y2="313.1" class="h-grid"/><text x="40" y="317.1" class="h-ax" text-anchor="end">3,900</text><line x1="48" x2="984" y1="267.0" y2="267.0" class="h-grid"/><text x="40" y="271.0" class="h-ax" text-anchor="end">4,050</text><line x1="48" x2="984" y1="220.9" y2="220.9" class="h-grid"/><text x="40" y="224.9" class="h-ax" text-anchor="end">4,200</text><line x1="48" x2="984" y1="174.8" y2="174.8" class="h-grid"/><text x="40" y="178.8" class="h-ax" text-anchor="end">4,350</text><line x1="48" x2="984" y1="128.7" y2="128.7" class="h-grid"/><text x="40" y="132.7" class="h-ax" text-anchor="end">4,500</text><line x1="48" x2="984" y1="82.6" y2="82.6" class="h-grid"/><text x="40" y="86.6" class="h-ax" text-anchor="end">4,650</text><line x1="48" x2="984" y1="36.4" y2="36.4" class="h-grid"/><text x="40" y="40.4" class="h-ax" text-anchor="end">4,800</text><text x="178.6" y="372" class="h-ax" text-anchor="middle">6월</text><text x="331.0" y="372" class="h-ax" text-anchor="middle">7월</text><text x="490.6" y="372" class="h-ax" text-anchor="middle">8월</text><text x="643.0" y="372" class="h-ax" text-anchor="middle">9월</text><text x="795.3" y="372" class="h-ax" text-anchor="middle">10월</text><text x="955.0" y="372" class="h-ax" text-anchor="middle">11월</text><rect x="48" width="936" y="282.4" height="13.8" class="h-sup"/><text x="468.8" y="312.2" class="h-lab h-g">되찾은 지지대 3,955–4,000 · 6/30, 7/17, 7/29 저점</text><rect x="48" width="936" y="234.4" height="20.0" class="h-gap"/><text x="628.5" y="227.4" class="h-lab h-r">저항 4,091–4,156</text><polyline points="48.0,193.7 55.3,191.7 62.5,189.8 69.8,187.7 77.0,185.7 84.3,183.6 91.5,181.4 98.8,179.3 106.0,177.4 113.3,175.4 120.6,173.7 127.8,172.0 135.1,170.3 142.3,168.7 149.6,167.0 156.8,165.6 164.1,163.9 171.3,162.1 178.6,160.4 185.9,158.6 193.1,157.0 200.4,155.2 207.6,153.7 214.9,152.2 222.1,150.8 229.4,149.7 236.7,148.6 243.9,147.4 251.2,146.0 258.4,144.6 265.7,143.3 272.9,142.3 280.2,141.4 287.4,140.6 294.7,140.0 302.0,139.5 309.2,138.8 316.5,138.3 323.7,137.7 331.0,137.1 338.2,136.5 345.5,135.8 352.7,135.1 360.0,134.5 367.3,133.9 374.5,133.3 381.8,133.0 389.0,132.6 396.3,132.1 403.5,131.9 410.8,131.6 418.0,131.4 425.3,131.1 432.6,130.7 439.8,130.5 447.1,130.3 454.3,130.2 461.6,130.3 468.8,130.2 476.1,130.0 483.3,130.0 490.6,130.2 497.9,130.2 505.1,130.2 512.4,130.1 519.6,130.0 526.9,129.6 534.1,129.0 541.4,128.5 548.7,128.1 555.9,127.4 563.2,126.7 570.4,126.0 577.7,125.2 584.9,124.3 592.2,123.3 599.4,122.2 606.7,121.1 614.0,120.1 621.2,119.1 628.5,118.4 635.7,117.9 643.0,117.6 650.2,117.3 657.5,116.6 664.7,115.9 672.0,115.4 679.3,114.8 686.5,114.3 693.8,113.8 701.0,113.4 708.3,113.1 715.5,112.7 722.8,112.5 730.0,112.3 737.3,112.0 744.6,111.8 751.8,111.7 759.1,111.6 766.3,111.4 773.6,111.5 780.8,111.6 788.1,111.8 795.3,112.0 802.6,112.3 809.9,112.5 817.1,112.8 824.4,113.2 831.6,113.5 838.9,113.9 846.1,114.4 853.4,114.9 860.7,115.6 867.9,115.8 875.2,116.2 882.4,116.4 889.7,116.7 896.9,117.2 904.2,117.9 911.4,118.6 918.7,119.2 926.0,119.9 933.2,120.7 940.5,121.6 947.7,122.7 955.0,123.7 962.2,124.7 969.5,125.8 976.7,126.9 984.0,128.2" class="h-ma200"/><polyline points="48.0,28.9 55.3,31.8 62.5,35.0 69.8,37.8 77.0,41.0 84.3,44.9 91.5,47.4 98.8,50.2 106.0,53.4 113.3,57.1 120.6,60.7 127.8,65.1 135.1,69.0 142.3,72.7 149.6,76.1 156.8,79.5 164.1,82.6 171.3,84.5 178.6,85.1 185.9,85.5 193.1,85.1 200.4,84.5 207.6,85.6 214.9,85.7 222.1,87.0 229.4,89.4 236.7,92.6 243.9,96.2 251.2,98.2 258.4,100.2 265.7,102.1 272.9,105.4 280.2,109.1 287.4,113.1 294.7,117.7 302.0,122.7 309.2,127.1 316.5,131.9 323.7,137.0 331.0,141.6 338.2,145.3 345.5,148.9 352.7,152.4 360.0,156.4 367.3,159.8 374.5,162.8 381.8,166.3 389.0,169.7 396.3,173.4 403.5,176.7 410.8,180.1 418.0,184.2 425.3,188.1 432.6,191.7 439.8,195.9 447.1,199.6 454.3,203.5 461.6,207.5 468.8,210.7 476.1,213.5 483.3,216.0 490.6,218.8 497.9,221.2 505.1,222.5 512.4,223.7 519.6,224.0 526.9,224.5 534.1,225.5 541.4,225.7 548.7,226.3 555.9,226.5 563.2,226.7 570.4,226.4 577.7,225.2 584.9,223.5 592.2,220.1 599.4,216.5 606.7,213.7 614.0,211.9 621.2,210.0 628.5,209.1 635.7,207.6 643.0,206.4 650.2,204.8 657.5,201.5 664.7,198.9 672.0,196.8 679.3,194.2 686.5,191.9 693.8,189.9 701.0,188.5 708.3,187.5 715.5,186.1 722.8,184.1 730.0,182.4 737.3,180.7 744.6,178.4 751.8,176.9 759.1,175.4 766.3,173.4 773.6,172.5 780.8,171.5 788.1,170.8 795.3,170.5 802.6,169.8 809.9,169.2 817.1,168.6 824.4,167.9 831.6,167.2 838.9,166.5 846.1,166.0 853.4,165.4 860.7,165.7 867.9,166.5 875.2,167.3 882.4,168.7 889.7,170.4 896.9,172.2 904.2,174.7 911.4,177.3 918.7,179.7 926.0,182.2 933.2,184.5 940.5,187.6 947.7,191.7 955.0,196.1 962.2,200.8 969.5,204.6 976.7,207.9 984.0,211.5" class="h-ma50"/><polyline points="48.0,107.6 55.3,68.9 62.5,63.8 69.8,57.7 77.0,58.4 84.3,71.3 91.5,65.1 98.8,71.7 106.0,109.6 113.3,110.8 120.6,125.2 127.8,117.8 135.1,115.6 142.3,121.5 149.6,128.0 156.8,144.5 164.1,128.9 171.3,100.1 178.6,126.7 185.9,122.5 193.1,138.8 200.4,127.1 207.6,170.1 214.9,170.7 222.1,194.3 229.4,241.4 236.7,247.3 243.9,209.0 251.2,174.3 258.4,173.4 265.7,165.1 272.9,206.8 280.2,220.1 287.4,236.4 294.7,279.7 302.0,267.7 309.2,252.8 316.5,270.4 323.7,270.5 331.0,257.0 338.2,243.7 345.5,230.9 352.7,234.0 360.0,257.0 367.3,239.1 374.5,247.4 381.8,280.6 389.0,260.9 396.3,266.4 403.5,284.8 410.8,276.6 418.0,277.5 425.3,258.9 432.6,235.7 439.8,266.9 447.1,260.6 454.3,258.7 461.6,270.5 468.8,271.2 476.1,251.6 483.3,249.5 490.6,254.6 497.9,235.5 505.1,188.5 512.4,190.3 519.6,159.5 526.9,153.4 534.1,146.8 541.4,138.7 548.7,153.1 555.9,147.9 563.2,136.8 570.4,153.1 577.7,114.7 584.9,106.7 592.2,73.1 599.4,67.9 606.7,68.9 614.0,81.5 621.2,78.3 628.5,119.5 635.7,134.4 643.0,160.5 650.2,154.9 657.5,116.4 664.7,135.9 672.0,147.4 679.3,140.7 686.5,157.2 693.8,156.7 701.0,174.2 708.3,180.1 715.5,163.2 722.8,159.5 730.0,151.8 737.3,164.4 744.6,166.7 751.8,184.5 759.1,190.8 766.3,183.6 773.6,230.6 780.8,227.1 788.1,225.0 795.3,220.2 802.6,232.5 809.9,234.2 817.1,224.9 824.4,239.1 831.6,234.1 838.9,215.9 846.1,223.8 853.4,227.9 860.7,249.2 867.9,230.1 875.2,226.7 882.4,233.2 889.7,238.5 896.9,236.3 904.2,263.8 911.4,279.9 918.7,270.6 926.0,259.4 933.2,266.5 940.5,272.7 947.7,313.4 955.0,291.7 962.2,300.7 969.5,259.9 976.7,247.5 984.0,259.3" class="h-px"/><line x1="773.6" x2="984" y1="322.1" y2="322.1" class="h-stop"/><text x="970.0" y="338.1" class="h-lab h-r" text-anchor="end">GLD 손절 ≈ 3,871</text><text x="947.7" y="355.5" class="h-lab h-r" text-anchor="middle">10/30 저점 3,879</text><line id="hx" x1="0" x2="0" y1="18" y2="350" class="h-cross" visibility="hidden"/><circle id="hd" cx="984.0" cy="259.3" r="5" class="h-end"/><rect x="48" y="18" width="936" height="332" fill="transparent" id="hz"/></svg></div>
+    <div class="calls">
+      <div><span>지금</span><b>신규 진입 없음</b><p>GLD 54주로 이미 금을 들고 있습니다</p></div>
+      <div><span>다음 행동</span><b class="num" style="color:var(--h-good)">4,160 도달 시 절반 익절</b><p>GLD 목표 1 380과 같은 자리</p></div>
+      <div><span>무효화</span><b class="num" style="color:var(--h-bad)">종가 3,870 이탈</b><p>GLD 손절 353.50과 같은 자리</p></div>
+    </div>
+  </div>
+</div>
+
+<main><div class="in">
+
+<section class="verdict">
+  <div class="sh">
+    <h2>금은 이미 GLD로 들고 있습니다. 선물을 더하지 않고 그 포지션을 금 가격으로 관리합니다</h2>
+    <p class="lede">10/30에 6~7월 지지대(3,955~4,000)를 깨고 3,879까지 밀렸지만, 사흘 만에 되찾고 이번 주 <strong>+4.5%</strong>로 마감했습니다. 이탈이 실패했다는 신호입니다. 지난주 걸어둔 GLD 역지정가 주문도 11/4에 체결됐습니다. 마이크로 금 선물(MGC)을 더하면 같은 금에 리스크가 겹칩니다. 1계약만으로도 리스크 예산을 넘어서 추가 진입은 하지 않습니다.</p>
+  </div>
+  <div class="holder">
+    <span><span class="pill p-a">보유 중 · GLD 54주 @ 369.58</span></span>
+    <h3>4,091~4,156에서 절반 정리, 손절은 본전으로</h3>
+    <p>금이 4,160(GLD 380)에 닿으면 절반을 팔고 남은 물량의 손절을 진입가 369.58로 올립니다. 금 종가가 3,870(GLD 353.50) 아래로 내려가면 전부 정리합니다.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>기술적 현황과 가격 사다리</h2>
+    <p>사다리는 금 가격 축척입니다. GLD 포지션의 진입·손절·목표를 금 가격으로 바꿔(약 10.95배) 함께 표시했습니다.</p>
+  </div>
+  <div class="tech">
+    <dl class="facts">
+      <div class="fact"><dt>추세</dt><dd>고점이 <span class="num">5,586 → 5,434 → 4,918 → 4,783 → 4,755 → 4,242</span>로 낮아지는 하락 추세는 그대로입니다. 20일선 <span class="num">4,081</span> 바로 아래, 50·200일선(<span class="num">4,230 / 4,502</span>) 아래이고 200일선은 계속 내려갑니다.</dd></div>
+      <div class="fact"><dt>이탈 실패</dt><dd>10/30 장중 <span class="num">3,879</span>, 종가 <span class="num">3,899</span>로 지지대를 깼지만 11/4 하루 <span class="num">+3.4%</span>로 4,000을 되찾았습니다. 깨진 지지 아래로 들어온 매도가 붙잡힌 모양입니다.</dd></div>
+      <div class="fact"><dt>주봉</dt><dd>이번 주 시가 <span class="num">3,890</span>, 종가 <span class="num">4,074.9</span>. 3주 연속 하락을 끊었지만, 지난주 고점 <span class="num">4,097</span> 위로 마감하지는 못했습니다. 10주선 <span class="num">4,217</span>, 40주선 <span class="num">4,485</span> 아래입니다.</dd></div>
+      <div class="fact"><dt>모멘텀</dt><dd>RSI <span class="num">47.2</span>, MACD <span class="num">-53</span>이 시그널 <span class="num">-65</span> 위로 올라섰습니다. ATR <span class="num">86.6</span>달러로 하루 변동이 큽니다.</dd></div>
+      <div class="fact"><dt>저항</dt><dd>9~10월 저점과 11/5 고점이 겹친 <span class="num">4,091~4,156</span>. 금요일에 <span class="num">4,116</span>에서 밀려 <span class="num">4,075</span>로 끝났습니다. 그 위는 50일선·10/12 고점 <span class="num">4,230~4,242</span>입니다.</dd></div>
+      <div class="fact"><dt>관련 자산</dt><dd>은 선물 5일 <span class="num">+5.5%</span>로 함께 반등했지만 21일로는 <span class="num">-12.3%</span>입니다. 달러지수 <span class="num">102.3</span>은 200일선보다 <span class="num">2.6%</span> 위에서 버티고 있어 금에 우호적이지 않습니다.</dd></div>
+    </dl>
+    <div class="ladder"><svg viewBox="0 0 520 600" role="img" aria-label="금 가격 사다리: GLD 포지션 진입 약 4,047, 손절 약 3,871, 목표 약 4,161과 4,271, 주요 지지와 저항"><rect x="98" width="28" y="302.5" height="140.9" class="l-risk"/><rect x="98" width="28" y="123.6" height="178.9" class="l-rew"/><line x1="112" x2="112" y1="20" y2="580" class="l-axis"/><line x1="108" x2="116" y1="580.0" y2="580.0" class="l-tick"/><text x="90" y="584.0" class="l-ax" text-anchor="end">3,700</text><line x1="108" x2="116" y1="500.0" y2="500.0" class="l-tick"/><text x="90" y="504.0" class="l-ax" text-anchor="end">3,800</text><line x1="108" x2="116" y1="420.0" y2="420.0" class="l-tick"/><text x="90" y="424.0" class="l-ax" text-anchor="end">3,900</text><line x1="108" x2="116" y1="340.0" y2="340.0" class="l-tick"/><text x="90" y="344.0" class="l-ax" text-anchor="end">4,000</text><line x1="108" x2="116" y1="260.0" y2="260.0" class="l-tick"/><text x="90" y="264.0" class="l-ax" text-anchor="end">4,100</text><line x1="108" x2="116" y1="180.0" y2="180.0" class="l-tick"/><text x="90" y="184.0" class="l-ax" text-anchor="end">4,200</text><line x1="108" x2="116" y1="100.0" y2="100.0" class="l-tick"/><text x="90" y="104.0" class="l-ax" text-anchor="end">4,300</text><line x1="108" x2="116" y1="20.0" y2="20.0" class="l-tick"/><text x="90" y="24.0" class="l-ax" text-anchor="end">4,400</text><line x1="98" x2="146" y1="76.8" y2="76.8" class="l-lv c-m"/><text x="156" y="80.8" class="l-lab c-m"><tspan class="l-p">4,329</tspan><tspan dx="10" class="l-sub">9/2 저점 · 그다음 저항</tspan></text><line x1="98" x2="146" y1="123.6" y2="123.6" class="l-lv c-g"/><text x="156" y="121.6" class="l-lab c-g"><tspan class="l-p">4,270</tspan><tspan dx="10" class="l-sub">목표 2 · GLD 390</tspan></text><rect x="130" width="10" y="146.4" height="9.6" class="l-b-r"/><line x1="98" x2="146" y1="151.2" y2="151.2" class="l-lv c-r"/><text x="156" y="163.2" class="l-lab c-r"><tspan class="l-p">4,230–4,242</tspan><tspan dx="10" class="l-sub">50일선 · 10/12 고점</tspan></text><line x1="98" x2="146" y1="211.2" y2="211.2" class="l-lv c-g"/><text x="156" y="207.2" class="l-lab c-g"><tspan class="l-p">4,161</tspan><tspan dx="10" class="l-sub">목표 1 · GLD 380</tspan></text><rect x="130" width="10" y="215.2" height="52.0" class="l-b-r"/><line x1="98" x2="146" y1="244.0" y2="244.0" class="l-lv c-r"/><text x="156" y="252.0" class="l-lab c-r"><tspan class="l-p">4,091–4,156</tspan><tspan dx="10" class="l-sub">1차 저항</tspan></text><line x1="98" x2="146" y1="280.1" y2="280.1" class="l-lv c-f"/><text x="156" y="290.1" class="l-lab c-f"><tspan class="l-p">4,074.9</tspan><tspan dx="10" class="l-sub">11/6 종가 (현물 ≈ 4,069)</tspan></text><line x1="98" x2="146" y1="302.5" y2="302.5" class="l-lv c-a"/><text x="156" y="316.5" class="l-lab c-a"><tspan class="l-p">4,047</tspan><tspan dx="10" class="l-sub">GLD 진입 369.58</tspan></text><rect x="130" width="10" y="340.0" height="36.0" class="l-b-g"/><line x1="98" x2="146" y1="357.6" y2="357.6" class="l-lv c-g"/><text x="156" y="367.6" class="l-lab c-g"><tspan class="l-p">3,955–4,000</tspan><tspan dx="10" class="l-sub">되찾은 지지대</tspan></text><line x1="98" x2="146" y1="443.3" y2="443.3" class="l-lv c-r"/><text x="156" y="459.3" class="l-lab c-r"><tspan class="l-p">3,871</tspan><tspan dx="10" class="l-sub">GLD 손절 353.50</tspan></text><rect x="130" width="10" y="460.0" height="80.0" class="l-b-g"/><line x1="98" x2="146" y1="500.0" y2="500.0" class="l-lv c-m"/><text x="156" y="504.0" class="l-lab c-m"><tspan class="l-p">3,750–3,850</tspan><tspan dx="10" class="l-sub">다음 지지 (2025-09)</tspan></text><text x="54" y="376.9" class="l-r" text-anchor="end">-1R</text><text x="54" y="217.0" class="l-w" text-anchor="end">+1.27R</text><circle cx="112" cy="280.1" r="5" class="l-now"/></svg></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>매크로 국면: Contraction</h2>
+    <p>종합 55.4/100, 신뢰도 높음, 국면 전환 확률 70~90%. 1주 전 Transitional(46.8)에서 수축 국면으로 넘어왔습니다. 신용 경색, 방어주 선호, 주식·채권 관계의 리스크 오프 전환이 함께 나타나는 전형적인 후기 사이클입니다.</p>
+  </div>
+  <div class="gauge" role="img" aria-label="매크로 종합 점수 55.4, 10월 31일 46.8">
+    <div class="gtrack">
+      <div class="gmark prev" style="left:46.8%"><span>10/31 · 46.8</span></div>
+      <div class="gmark now" style="left:55.4%"><span>현재 · 55.4</span></div>
+    </div>
+    <div class="gscale"><span>0</span><span>50</span><span>100</span></div>
+  </div>
+  <div class="mtable"><div class="mrow"><div class="mname"><b>시장 집중도</b><span>RSP/SPY</span></div><div class="mtrack"><i style="width:70%"></i></div><div class="mval num">70</div><div class="mnote">확산 확정, 이번 달 골든크로스</div></div><div class="mrow"><div class="mname"><b>수익률 곡선</b><span>10Y–2Y</span></div><div class="mtrack"><i style="width:50%"></i></div><div class="mval num">50</div><div class="mnote">플래트닝</div></div><div class="mrow"><div class="mname"><b>신용</b><span>HYG/LQD</span></div><div class="mtrack"><i style="width:49%"></i></div><div class="mval num">49</div><div class="mnote">신용 조건 조이는 중</div></div><div class="mrow"><div class="mname"><b>규모</b><span>IWM/SPY</span></div><div class="mtrack"><i style="width:45%"></i></div><div class="mval num">45</div><div class="mnote">대형주 우위 약해지는 중</div></div><div class="mrow"><div class="mname"><b>주식·채권</b><span>SPY/TLT</span></div><div class="mtrack"><i style="width:52%"></i></div><div class="mval num">52</div><div class="mnote">리스크 오프 쪽으로 이동</div></div><div class="mrow"><div class="mname"><b>섹터 로테이션</b><span>XLY/XLP</span></div><div class="mtrack"><i style="width:60%"></i></div><div class="mval num">60</div><div class="mnote">방어주 선호 확정</div></div></div>
+  <p class="m" style="max-width:68ch">금에 주는 의미: 수축 국면은 보통 방어 자산인 금에 우호적입니다. 다만 10월에는 같은 환경에서도 금이 빠졌으니, 국면이 금을 끌어올린다고 미리 가정하지 않습니다. 가격이 4,160을 넘는지로 확인합니다.</p>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>향후 2~6주 시나리오</h2>
+    <p>가격 방향 순서로 놓았습니다. 왼쪽이 하락, 오른쪽이 상승입니다.</p>
+  </div>
+  <div style="display:grid;gap:8px">
+    <div class="split" role="img" aria-label="약세 30%, 기본 40%, 강세 30%">
+      <div class="s-bear">30%</div><div class="s-base">40%</div><div class="s-bull">30%</div>
+    </div>
+    <div class="axisnote"><span>← 3,750~3,880</span><span>3,955~4,160 박스</span><span>4,240~4,330 →</span></div>
+  </div>
+  <div class="scen">
+    <article><h3 class="r">약세 · 저항에서 다시 밀림</h3><p>4,091~4,156에서 꺾여 3,880을 다시 깨면 이번 반등은 끝이고, 3,750~3,850까지 열립니다. GLD는 손절됩니다.</p></article>
+    <article><h3 class="w">기본 · 박스권</h3><p>3,955~4,160 사이를 오가며 50일선이 내려오기를 기다립니다. GLD는 목표 1 근처에서 일부 정리합니다.</p></article>
+    <article><h3 class="g">강세 · 저항 돌파</h3><p>4,160 위 종가가 나오면 4,240(50일선), 이어서 4,330(9/2 저점)까지 갑니다. GLD 목표 2 390과 겹칩니다.</p></article>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>트레이드 가설</h2>
+    <p>세 가지를 세웠고, 새 리스크 없이 기존 GLD 포지션으로 대응하는 H-001을 채택했습니다.</p>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>ID</th><th>가설</th><th>점수</th><th>판정</th></tr>
+    <tr class="pick"><td class="n">H-001</td><td>금 노출은 GLD 하나로 유지. 4,160에서 절반 익절, 손절은 본전으로</td><td class="n">3.95</td><td><span class="pill p-g">채택</span></td></tr>
+    <tr><td class="n">H-002</td><td>3,990~4,000 눌림에서 MGC 1계약 추가, 손절 3,870. 손익비는 좋지만 1계약 리스크 $1,300가 예산 $630을 넘음</td><td class="n">2.7</td><td><span class="pill p-w">보류</span></td></tr>
+    <tr><td class="n">H-003</td><td>4,165 돌파 매수, 손절 4,030. 바로 위 50일선까지 보상이 0.56R뿐</td><td class="n">2.1</td><td><span class="pill p-r">기각</span></td></tr>
+  </table></div>
+  <div class="kill">
+    <div><b>금 종가 3,870 미만</b><span>GLD 353.50 손절과 같은 자리</span></div>
+    <div><b>주봉 종가 3,880 미만</b><span>이탈 실패 가설 폐기</span></div>
+    <div><b>4,091~4,156에서 장대 음봉</b><span>절반 익절을 앞당김</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>실행 계획</h2>
+    <p>계좌 $100,000. 같은 기초자산의 리스크 합계를 1.5% 안에 두었습니다.</p>
+  </div>
+  <div class="exec">
+    <div class="ticket">
+      <header><span>보유 포지션 · 페이퍼</span><b>th_gld_rev_20261031_a727</b></header>
+      <dl>
+        <dt>종목</dt><dd class="num">GLD</dd>
+        <dt>체결</dt><dd class="num">2026-11-04 · 369.58</dd>
+        <dt>수량</dt><dd>54주</dd>
+        <dt>손절</dt><dd class="r num">353.50 (금 ≈ 3,871)</dd>
+        <dt>목표 1 / 2</dt><dd class="g num">380 / 390 (금 ≈ 4,161 / 4,271)</dd>
+        <dt>현재 평가</dt><dd class="g">372.52 · +$159</dd>
+        <dt class="tot">최대 손실</dt><dd class="tot r">$868 (0.87%)</dd>
+      </dl>
+    </div>
+    <div class="rules">
+      <p><strong>체결 기록:</strong> 11/4 시가 369.58이 트리거 367.50 위에서 열려 시가에 체결된 것으로 처리했습니다. 시가 372 초과면 진입하지 않는다는 조건 안이라 유효합니다. 리스크는 계획한 $756보다 늘어난 $868이지만 1% 안입니다.</p>
+      <p><strong>선물 추가 사이징:</strong> MGC(10온스, 1달러 = $10) 진입 4,000·손절 3,870이면 계약당 리스크가 $1,300입니다. 남은 금 리스크 예산 $630으로는 0계약이라 futures-position-sizer가 NO_TRADE를 냈습니다. 손절을 좁혀 억지로 맞추지 않습니다.</p>
+      <p><strong>포트폴리오 리스크:</strong> GLD $868과 대기 중인 GOOG 주문 $999을 합쳐 최대 $1,867(1.87%)로, 상한 6%보다 한참 낮습니다.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>8단계 점검 루프</h2>
+    <p>순서대로 실행한 결과입니다. 새 주문이 없어서 진입 게이트는 기록만 남겼습니다.</p>
+  </div>
+  <div class="loop">
+    <div><span class="k">1 · 매크로 국면</span><b>Contraction 55.4</b><p>신뢰도 높음, 방어 자산은 막지 않음</p></div>
+    <div><span class="k">2 · 기술적 분석</span><b>하락 추세 속 이탈 실패</b><p>저항 4,091~4,156 / 무효 3,870</p></div>
+    <div class="skip"><span class="k">3 · 실적·스크리닝</span><b>해당 없음</b><p>원자재라 실적이 없음. COT는 무료 플랜이라 미실행</p></div>
+    <div><span class="k">4 · 가설</span><b>H-001 채택</b><p>점수 3.95, 새 리스크 없음</p></div>
+    <div><span class="k">5 · 사이징</span><b>MGC 0계약</b><p>NO_TRADE · 계약당 $1,300 &gt; 예산 $630</p></div>
+    <div><span class="k">6 · 진입 게이트</span><span class="pill p-a">NO_ACTIONABLE_ORDERS</span><p>관망 후보로 기록</p></div>
+    <div><span class="k">7 · 서킷브레이커</span><span class="pill p-g">TRADING_ALLOWED</span><p>청산 기록 없음</p></div>
+    <div><span class="k">8 · 트레이더 메모리</span><span class="pill p-a">GLD ACTIVE · 금 IDEA</span><p>th_gc_rev_20261107_21a1 등록</p></div>
+  </div>
+</section>
+
+</div></main>
+
+<footer><div class="in">
+  <p>데이터: 금은 COMEX 금 선물 연속물(GC=F) 일봉을 yfinance로 받았습니다. 현물(XAU/USD)은 yfinance에서 조회되지 않아, 화면에서 보신 약 4,069를 기준으로 선물이 현물보다 5~6달러 높다고 적었습니다. GLD와 금의 가격 비율(약 10.95배)은 최근 5거래일 종가로 구한 근사치입니다. 11/6 선물 거래량은 데이터 소스에서 11/5와 같은 값으로 나와 판단에 쓰지 않았습니다.</p>
+  <p>COT(대형 투기 포지셔닝)는 FMP Premium+ 전용이라 무료 키로는 받지 못했습니다(조회 1회, 시장 0개 분석). MGC 계약 규격(10온스, 틱 0.10 = $1)은 사이저 검증 표에 없어 CME 표준 규격을 직접 넣었습니다.</p>
+  <p>시나리오 확률과 지지·저항 구간은 차트에 근거한 추정치입니다. 페이퍼 트레이딩 연습용이며 투자 권유가 아닙니다.</p>
+</div></footer>
+
+<script>
+(function(){
+  var S=[["2026-05-05", 4568.5], ["2026-05-06", 4694.3], ["2026-05-07", 4710.9], ["2026-05-08", 4730.7], ["2026-05-11", 4728.7], ["2026-05-12", 4686.7], ["2026-05-13", 4706.7], ["2026-05-14", 4685.3], ["2026-05-15", 4561.9], ["2026-05-18", 4558.0], ["2026-05-19", 4511.2], ["2026-05-20", 4535.3], ["2026-05-21", 4542.5], ["2026-05-22", 4523.2], ["2026-05-26", 4502.3], ["2026-05-27", 4448.4], ["2026-05-28", 4499.3], ["2026-05-29", 4593.0], ["2026-06-01", 4506.3], ["2026-06-02", 4519.9], ["2026-06-03", 4466.9], ["2026-06-04", 4505.0], ["2026-06-05", 4365.3], ["2026-06-08", 4363.4], ["2026-06-09", 4286.4], ["2026-06-10", 4133.3], ["2026-06-11", 4114.0], ["2026-06-12", 4238.8], ["2026-06-15", 4351.6], ["2026-06-16", 4354.4], ["2026-06-17", 4381.4], ["2026-06-18", 4245.9], ["2026-06-22", 4202.7], ["2026-06-23", 4149.4], ["2026-06-24", 4008.8], ["2026-06-25", 4047.6], ["2026-06-26", 4096.3], ["2026-06-29", 4038.9], ["2026-06-30", 4038.5], ["2026-07-01", 4082.4], ["2026-07-02", 4125.7], ["2026-07-06", 4167.5], ["2026-07-07", 4157.4], ["2026-07-08", 4082.4], ["2026-07-09", 4140.8], ["2026-07-10", 4113.7], ["2026-07-13", 4005.7], ["2026-07-14", 4069.7], ["2026-07-15", 4051.8], ["2026-07-16", 3992.1], ["2026-07-17", 4018.8], ["2026-07-20", 4015.9], ["2026-07-21", 4076.4], ["2026-07-22", 4151.9], ["2026-07-23", 4050.2], ["2026-07-24", 4070.8], ["2026-07-27", 4077.0], ["2026-07-28", 4038.7], ["2026-07-29", 4036.3], ["2026-07-30", 4100.1], ["2026-07-31", 4107.0], ["2026-08-03", 4090.5], ["2026-08-04", 4152.6], ["2026-08-05", 4305.2], ["2026-08-06", 4299.6], ["2026-08-07", 4399.7], ["2026-08-10", 4419.7], ["2026-08-11", 4441.1], ["2026-08-12", 4467.5], ["2026-08-13", 4420.4], ["2026-08-14", 4437.3], ["2026-08-17", 4473.7], ["2026-08-18", 4420.6], ["2026-08-19", 4545.3], ["2026-08-20", 4571.4], ["2026-08-21", 4680.6], ["2026-08-24", 4697.8], ["2026-08-25", 4694.5], ["2026-08-26", 4653.3], ["2026-08-27", 4664.0], ["2026-08-28", 4529.9], ["2026-08-31", 4481.5], ["2026-09-01", 4396.4], ["2026-09-02", 4414.6], ["2026-09-03", 4539.9], ["2026-09-04", 4476.6], ["2026-09-08", 4439.0], ["2026-09-09", 4460.7], ["2026-09-10", 4407.3], ["2026-09-11", 4408.9], ["2026-09-14", 4351.9], ["2026-09-15", 4332.8], ["2026-09-16", 4387.5], ["2026-09-17", 4399.7], ["2026-09-18", 4424.9], ["2026-09-21", 4383.9], ["2026-09-22", 4376.4], ["2026-09-23", 4318.4], ["2026-09-24", 4298.0], ["2026-09-25", 4321.2], ["2026-09-28", 4168.4], ["2026-09-29", 4179.7], ["2026-09-30", 4186.7], ["2026-10-01", 4202.3], ["2026-10-02", 4162.3], ["2026-10-05", 4156.8], ["2026-10-06", 4187.1], ["2026-10-07", 4140.7], ["2026-10-08", 4157.0], ["2026-10-09", 4216.3], ["2026-10-12", 4190.6], ["2026-10-13", 4177.3], ["2026-10-14", 4107.9], ["2026-10-15", 4170.1], ["2026-10-16", 4181.1], ["2026-10-19", 4160.1], ["2026-10-20", 4142.6], ["2026-10-21", 4150.0], ["2026-10-22", 4060.4], ["2026-10-23", 4007.9], ["2026-10-26", 4038.4], ["2026-10-27", 4074.6], ["2026-10-28", 4051.6], ["2026-10-29", 4031.4], ["2026-10-30", 3898.9], ["2026-11-02", 3969.6], ["2026-11-03", 3940.4], ["2026-11-04", 4073.0], ["2026-11-05", 4113.5], ["2026-11-06", 4074.9]], G={"W": 1000, "L": 48, "R": 16, "T": 18, "B": 30, "H": 380, "lo": 3780, "hi": 4860, "N": 130};
+  var svg=document.getElementById('hc'), zone=document.getElementById('hz'),
+      cx=document.getElementById('hx'), dot=document.getElementById('hd'), rd=document.getElementById('rd');
+  if(!svg) return;
+  var X=function(k){return G.L+(G.W-G.L-G.R)*k/(G.N-1)},
+      Y=function(p){return G.T+(G.H-G.T-G.B)*(G.hi-p)/(G.hi-G.lo)};
+  function show(k){
+    var p=S[k]; cx.setAttribute('x1',X(k)); cx.setAttribute('x2',X(k)); cx.setAttribute('visibility','visible');
+    dot.setAttribute('cx',X(k)); dot.setAttribute('cy',Y(p[1])); rd.textContent=p[0]+' · '+p[1].toFixed(1);
+  }
+  function reset(){ cx.setAttribute('visibility','hidden'); show(G.N-1); cx.setAttribute('visibility','hidden'); }
+  zone.addEventListener('pointermove',function(e){
+    var r=svg.getBoundingClientRect(), x=(e.clientX-r.left)/r.width*G.W;
+    show(Math.max(0,Math.min(G.N-1,Math.round((x-G.L)/(G.W-G.L-G.R)*(G.N-1)))));
+  });
+  zone.addEventListener('pointerleave',reset);
+  var cur=G.N-1;
+  svg.addEventListener('keydown',function(e){
+    var d=e.key==='ArrowLeft'?-1:e.key==='ArrowRight'?1:0; if(!d) return;
+    e.preventDefault(); cur=Math.max(0,Math.min(G.N-1,cur+d)); show(cur);
+  });
+  svg.addEventListener('blur',reset);
+  var box=svg.parentElement; if(box.scrollWidth>box.clientWidth) box.scrollLeft=box.scrollWidth;
+})();
+</script>
