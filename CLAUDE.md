@@ -31,7 +31,21 @@ Plan → Trade → Record 루프 순서대로 아래 스킬을 자동으로 검�
      진입은 가설의 kill criteria와 사이징에 반영한다.
    - 갭 원인 뉴스는 **market-news-analyst** 기준으로 당일 기사를 확인한다. 확인하지 못하면 리포트에 "미확인"으로 남긴다.
 
-4. **trade-hypothesis-ideator** — 1~3번 결과를 근거로 반증 가능한 트레이드 가설 카드 생성·순위화 (kill criteria 포함).
+3-S. **최근 30일 여론 점검 (last30days, 매번 실행)** — 모든 종목·ETF·원자재 분석에서 2번 다음에 반드시 실행한다.
+   가격만으로는 안 보이는 원인(뉴스 촉매)과 군중 심리(투매·과열·피로)를 확인해 4번 가설의 근거로 쓴다.
+   - 스킬 절차(SKILL.md와 runtime·research-runbook·synthesis 참조 문서)를 그대로 따른다. 계획 파일(`--plan`),
+     Reddit 커뮤니티 지정(종목 전용 서브레딧은 `--dedicated-subreddits`), 웹 기사 보충 검색 2~3개,
+     저장 파일에 `## WebSearch Supplemental Results` 덧붙이기까지 생략하지 않는다.
+   - 실행 환경(2026-11-07 설정): Python은 `C:/Program Files/Python314/python.exe`, 저장 위치 `~/Documents/Last30Days`.
+     초기 설정은 끝났다(SETUP_COMPLETE). 브라우저 쿠키 사용 동의는 받았지만 X 쿠키를 찾지 못해 X는 빠지고,
+     ScrapeCreators 키가 없어 TikTok·Instagram도 빠진다. 사용 가능한 소스는 `--diagnose`로 매번 확인한다.
+   - Polymarket 확률은 어느 가격 구간인지 데이터에 표시되지 않으면 판단 근거로 쓰지 않고 각주에 그렇게 적는다.
+   - 리포트에는 매크로 국면 다음에 **"최근 30일 여론" 섹션**을 넣는다: 시기별 흐름 3칸 → 실제 댓글 인용 3개
+     (출처·추천 수 포함) → 강세 논리 / 약세 논리 → "매매에 주는 의미" 한 문단. 커뮤니티 의견은 사실이 아니라
+     견해라는 점을 각주에 남긴다. 채팅 응답은 스킬 출력 형식(배지 → What I learned → KEY PATTERNS → 엔진 footer)으로
+     여론 요약을 먼저 보여주고, 그다음 리포트 요약과 링크를 붙인다.
+
+4. **trade-hypothesis-ideator** — 1~3번 결과(3-S 여론 포함)를 근거로 반증 가능한 트레이드 가설 카드 생성·순위화 (kill criteria 포함).
 
 5. **position-sizer** (개별 주식/ETF 현물 기준) 또는 **futures-position-sizer** (지수·상품 선물 계약을
    직접 매매하는 경우) — 채택된 가설의 진입가/손절가로 리스크 1% 기준 수량 계산. 기본 1%, 예외적으로도
@@ -73,7 +87,7 @@ Plan → Trade → Record 루프 순서대로 아래 스킬을 자동으로 검�
    생성기에서 그린다 — 손으로 좌표를 찍지 않는다.
    - 구성: 어두운 히어로 밴드(판단 헤드라인 + 현재가 + 주석 달린 대형 차트, 마우스·←/→ 키로 날짜별 종가) →
      지금/진입 조건/무효화 3칸 → 판단 본문 + 보유자 대응 → 기술적 현황 + 실제 축척 **가격 사다리**
-     (리스크 -1R / 보상 +nR 구간) → 매크로 게이지(현재 vs 직전 점수) + 구성요소 막대 →
+     (리스크 -1R / 보상 +nR 구간) → 매크로 게이지(현재 vs 직전 점수) + 구성요소 막대 → 최근 30일 여론(last30days) →
      시나리오 확률 분할 막대(하락→상승 순) → 가설 표 + kill 조건 → 페이퍼 주문표 → 8단계 점검 루프 → 각주.
    - 서체: 제목 Nanum Myeongjo, 본문 IBM Plex Sans KR, 숫자 IBM Plex Mono(한글에는 모노 금지).
      `word-break: keep-all`로 한글 단어가 쪼개지지 않게 한다. 라이트/다크 둘 다 토큰으로 정의.
