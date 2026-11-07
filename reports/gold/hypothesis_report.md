@@ -1,40 +1,41 @@
 # Trade Hypothesis Report
 
 ## Summary
-Top hypothesis: H-001 (Keep GLD as the only gold exposure; manage it on gold levels) with priority score 3.95.
+Top hypothesis: H-001 (Buy the retest of reclaimed 3949-3994 support) with priority score 3.8.
 
 ## State Assessment
 Ranked hypotheses validated against guardrails.
 
 ## Hypotheses
-### H-001: Keep GLD as the only gold exposure; manage it on gold levels
+### H-001: Buy the retest of reclaimed 3949-3994 support
 - Recommendation: pursue
-- Priority Score: 3.95
-- Thesis: The 10/30 break below 3955 failed and gold reclaimed 4000; the open GLD long already expresses this. Take GLD T1 (380 ~ gold 4160) on a test of 4091-4156 and move the stop to breakeven.
-- Mechanism: Failed breakdown traps sellers; first resistance at old support 4091-4156
-- Expected Impact: Locks in the trade the plan already holds
+- Priority Score: 3.8
+- Thesis: The 10/30 break to 3873 failed and gold reclaimed 3994. A pullback to 3985-3995 that holds turns old support into a launch point toward 4150 and the SMA50 at 4224.
+- Mechanism: Reclaimed support retest after a bear trap
+- Expected Impact: 1.19R / 1.76R
 
-### H-002: Add MGC on pullback to 3990-4000
-- Recommendation: park
-- Priority Score: 2.7
-- Thesis: If gold pulls back to 3990-4000 and holds, add 1 MGC with stop 3870, targets 4156/4240.
-- Mechanism: Reclaimed support retest
-- Expected Impact: 1.2R / 1.85R
-
-### H-003: Add MGC on breakout above 4160
+### H-002: Buy a close above 4150
 - Recommendation: reject
-- Priority Score: 2.1
-- Thesis: A close above 4156 opens 4240-4330; buy-stop 4165, stop 4030.
-- Mechanism: Breakout over 11/5 high
-- Expected Impact: 0.56R to 4240, 1.22R to 4330
+- Priority Score: 2.35
+- Thesis: A close above 4150 opens the SMA50 at 4224; buy-stop 4160, stop 4025.
+- Mechanism: Breakout over resistance
+- Expected Impact: 0.47R to 4224
+
+### H-003: Buy now at 4069
+- Recommendation: reject
+- Priority Score: 1.85
+- Thesis: Enter at market after the rebound week.
+- Mechanism: Momentum continuation
+- Expected Impact: 0.4R to 4150
 
 ## Risks
-- Rejection at 4091-4156 sends gold back to 3880
-- Falling SMA200
-- 1 MGC risks $1,300 > $630 remaining gold budget
-- Correlated with GLD
-- Overhead SMA50 4230
+- Falling SMA200 and lower highs
+- Limit may never fill if gold breaks out first
+- 1 MGC needs 1.3% risk
+- SMA50 right overhead
 - Poor R:R
+- Buying under resistance
+- 1 MGC risk $2,040 > 2% cap
 
 ## Next Actions
 - Run MVE: Paper journal

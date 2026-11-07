@@ -1,0 +1,50 @@
+<style>
+.senti{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--line)}
+.senti article{padding:16px 20px 0 0;display:grid;gap:8px;align-content:start;min-width:0}
+.senti article+article{padding-left:20px;border-left:1px solid var(--line)}
+.senti .when{font-family:var(--mono);font-size:.78rem;color:var(--muted)}
+.senti h3{font-size:1rem}
+.senti p{color:var(--muted);font-size:.92rem}
+.senti a{color:var(--accent)}
+.voices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.voices blockquote{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 18px;display:grid;gap:10px;align-content:space-between}
+.voices q{font-size:.95rem;line-height:1.6;quotes:"“" "”"}
+.voices cite{font-style:normal;font-size:.8rem;color:var(--muted)}
+.voices cite a{color:var(--muted)}
+.camps{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px}
+.camps>div{display:grid;gap:10px;align-content:start}
+.camps h3{font-size:1rem}
+.camps ul{margin:0;padding-left:1.1em;display:grid;gap:8px;color:var(--muted);font-size:.93rem}
+.camps a{color:var(--accent)}
+@media (max-width:860px){.voices{grid-template-columns:1fr}.camps{grid-template-columns:1fr}}
+@media (max-width:560px){.senti{grid-template-columns:1fr}.senti article+article{padding-left:0;border-left:0;border-top:1px solid var(--line)}.senti article{padding-bottom:12px}}
+</style>
+<section>
+  <div class="sh">
+    <h2>최근 30일 여론: 개인은 버티고, 시장은 금리를 봅니다</h2>
+    <p>10/8~11/7 Reddit 22개 글, YouTube 8개 영상, Hacker News 8개 글을 last30days로 모았습니다. X는 이번 조사에 포함되지 않았습니다.</p>
+  </div>
+  <div class="senti">
+    <article><span class="when">10/14 ~ 10/23 · 하락기</span><h3 class="r">"왜 떨어지나"가 가장 큰 질문</h3><p>r/Gold에서 댓글이 가장 많이 달린 글은 <a href="https://www.reddit.com/r/Gold/comments/1xd1bph/gold_is_back_down_to_3900_whats_causing_the_drop/">"Gold is back down to $3,900. What's causing the drop?"</a>(333점, 댓글 415개)입니다. 팔자는 글보다 원인을 묻는 글이 많았습니다.</p></article>
+    <article><span class="when">10/30 · 1년 최저</span><h3 class="w">안전자산이 왜 안 오르나</h3><p>중동 긴장에도 금이 빠지자 <a href="https://www.reddit.com/r/Gold/comments/1xjqyj4/for_what_reason_did_gold_not_increase_in_value_in/">"왜 금이 오르지 않았나"</a>(댓글 294개)는 글이 올라왔습니다. 댓글은 중앙은행이 싸게 사려고 누른다는 주장 쪽으로 흘렀습니다.</p></article>
+    <article><span class="when">11/4 ~ 11/6 · 반등</span><h3 class="g">안도, 그러나 들뜨지는 않음</h3><p>r/Wallstreetsilver에 <a href="https://www.reddit.com/r/Wallstreetsilver/comments/1xnwa40/midterms_are_behind_us_elliott_wave_abc_are/">"조정이 끝났고 신고가로 간다"</a>는 글이 나왔지만 55점에 그쳤습니다. r/Gold에서는 "내가 팔면 바로 오를 것"이라는 <a href="https://www.reddit.com/r/Gold/comments/1xp1o64/i_will_be_selling_gold_tomorrow_threat/">농담 글</a>이 155점을 받았습니다.</p></article>
+  </div>
+  <div class="voices">
+    <blockquote><q>Let's say it goes to 3,500, that's a 14% downside. Let's say it goes to $8k, that's a 100% upside.</q><cite><a href="https://www.reddit.com/r/Gold/comments/1xcx0xf/gold_was_4008_on_june_24th/">u/luv2block · r/Gold · 38점</a></cite></blockquote>
+    <blockquote><q>I am a megabull and have been holding since 2000, but even I get tired of this occasionally.</q><cite><a href="https://www.youtube.com/watch?v=Fll6KywJ1sE">@Jaguar-s7f · Bald Guy Money 댓글 · 좋아요 54</a></cite></blockquote>
+    <blockquote><q>Sorry guys, Silver is gonna go further down because I bought some 2 days ago.</q><cite><a href="https://www.youtube.com/watch?v=FjWbz5GLLMM">@BlackDeath2022 · Bald Guy Money 댓글 · 좋아요 350</a></cite></blockquote>
+  </div>
+  <div class="camps">
+    <div><h3 class="g">강세 쪽 논리</h3><ul>
+      <li><a href="https://www.youtube.com/watch?v=FjWbz5GLLMM">Bald Guy Money</a>(조회 15만): 4,800 근처는 트레이더 매도 구간, 4,000 근처는 중앙은행 매수 구간이라 그 사이에 끼어 있다는 설명.</li>
+      <li><a href="https://www.youtube.com/watch?v=fwq9bo-Sn6k">GoldCore TV</a>: 가격이 4,000 근처로 내려온 몇 주 동안 중국 가계의 실물 매수는 오히려 늘었다. 상하이 실물 인도 계약에서 한 주에 약 430톤이 거래됐다.</li>
+      <li><a href="https://www.youtube.com/watch?v=SMP4fzOXwqw">WION</a>: 금과 주식이 함께 빠지는 모습이 2008년과 비슷하다는 분석. 당시 금은 10월에 바닥을 찍고 3년간 250% 넘게 올랐다.</li>
+    </ul></div>
+    <div><h3 class="r">약세 쪽 논리</h3><ul>
+      <li><a href="https://www.cnbc.com/2026/10/29/gold-slips-as-markets-assess-fed-signals-await-us-inflation-data.html">CNBC</a>: 9월 물가가 다시 오르면서 연준이 12월에 금리를 올릴 수 있다는 전망이 커졌다. 이자가 없는 금에는 불리하다.</li>
+      <li><a href="https://www.kitco.com/news/article/2026-10-30/gold-prices-plunge-one-year-low-below-3900-higher-oil-prices-fuel-fears">Kitco</a>: 이란 전쟁으로 유가가 높게 유지되면 고금리도 길어진다. Commerzbank는 기술주 급락에 따른 강제 매도를 원인으로 봤다. JPMorgan은 금리 정점 전까지 추가 하락을 예상한다.</li>
+      <li><a href="https://www.youtube.com/watch?v=fwq9bo-Sn6k">GoldCore TV</a>: 헤지펀드와 추세추종 자금이 9월에 COMEX 금 순매수를 84톤 줄였다.</li>
+    </ul></div>
+  </div>
+  <p class="lede" style="font-size:1rem">매매에 주는 의미: 여론에는 공포에 따른 투매가 보이지 않습니다. 오래 들고 있던 개인이 지쳐 있을 뿐이라, 역발상 매수 근거로 삼을 만큼 극단적이지 않습니다. 반등의 계기도 중간선거 직후의 달러 약세(<a href="https://seekingalpha.com/news/4665825-gold-soars-past-4000-in-biggest-daily-gain-since-august-as-dollar-weakens-oil-surges">Seeking Alpha</a>, <a href="https://www.bloomberg.com/news/articles/2026-11-04/gold-holds-above-4-000-as-dollar-yields-fall-on-midterm-result">Bloomberg</a>)라는 한 번의 이벤트였습니다. 그래서 4,150 돌파를 쫓지 않고 3,995 눌림을 기다리는 계획을 유지합니다. 다음 변수는 고용·물가 지표와 12월 FOMC입니다.</p>
+</section>

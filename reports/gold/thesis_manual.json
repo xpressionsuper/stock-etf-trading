@@ -1,2 +1,3 @@
-{"ticker":"GC","thesis_type":"mean_reversion","setup_type":"failed_breakdown_watch",
- "thesis_statement":"Gold (GC=F 4074.9, spot ~4069) reclaimed 3955-4000 after the 10/30 break to 3879. Exposure held via GLD (th_gld_rev_20261031_a727). Watch-only: add 1 MGC at 4000 (stop 3870) only if combined gold risk budget allows; futures sizer currently NO_TRADE (1 MGC = $1,300 risk > $630 budget)."}
+{"ticker":"GC","thesis_type":"mean_reversion","setup_type":"failed_breakdown_support_retest",
+ "thesis_statement":"H-001: Gold (spot 4069, GC=F 4074.9) reclaimed 3949-3994 after the 10/30 break to 3873. Buy 1 MGC on a limit at 3995 spot (~4001 futures), stop 3865 spot (~3871 futures), T1 4150, T2 4224. Cancel if no fill by 2026-11-20 or a close above 4150 before fill; weekly close < 3873 invalidates.",
+ "stop_price":3871.0}

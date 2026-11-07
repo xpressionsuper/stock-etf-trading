@@ -1,15 +1,18 @@
 thesis_id: th_gc_rev_20261107_21a1
 ticker: GC
 created_at: '2026-11-07T08:46:10+00:00'
-updated_at: '2026-11-07T08:46:11+00:00'
+updated_at: '2026-11-07T08:53:58+00:00'
 thesis_type: mean_reversion
 setup_type: failed_breakdown_watch
 catalyst: null
-status: IDEA
+status: INVALIDATED
 status_history:
 - status: IDEA
   at: '2026-11-07T08:46:10+00:00'
   reason: manually entered
+- status: INVALIDATED
+  at: '2026-11-07T08:53:58+00:00'
+  reason: 'invalidated: superseded: plan rebuilt without GLD exposure'
 thesis_statement: 'Gold (GC=F 4074.9, spot ~4069) reclaimed 3955-4000 after the 10/30
   break to 3879. Exposure held via GLD (th_gld_rev_20261031_a727). Watch-only: add
   1 MGC at 4000 (stop 3870) only if combined gold risk budget allows; futures sizer
@@ -33,7 +36,7 @@ exit:
   time_stop_days: null
   actual_price: null
   actual_date: null
-  exit_reason: null
+  exit_reason: invalidated
 position: null
 market_context: null
 monitoring:

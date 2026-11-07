@@ -2,33 +2,40 @@
  "hypotheses": [
   {
    "hypothesis_id": "H-001",
-   "title": "Keep GLD as the only gold exposure; manage it on gold levels",
-   "thesis": "The 10/30 break below 3955 failed and gold reclaimed 4000; the open GLD long already expresses this. Take GLD T1 (380 ~ gold 4160) on a test of 4091-4156 and move the stop to breakeven.",
-   "problem_target": "Avoid stacking correlated risk",
-   "mechanism": "Failed breakdown traps sellers; first resistance at old support 4091-4156",
+   "title": "Buy the retest of reclaimed 3949-3994 support",
+   "thesis": "The 10/30 break to 3873 failed and gold reclaimed 3994. A pullback to 3985-3995 that holds turns old support into a launch point toward 4150 and the SMA50 at 4224.",
+   "problem_target": "Enter the failed breakdown without chasing into 4085-4150 resistance",
+   "mechanism": "Reclaimed support retest after a bear trap",
    "evidence_basis": [
-    "Reclaim of 3955-4000 within 3 sessions",
-    "MACD bullish cross",
-    "Week +4.5%"
+    "3949-3994 held Jun-Jul three times",
+    "Reclaimed within 3 sessions (+3.4% on 11/4)",
+    "MACD bullish cross"
    ],
    "proposed_rule_changes": [
     {
+     "component": "entry_logic",
+     "change": "Buy limit 3995 spot (MGC ~4001), valid to 2026-11-20"
+    },
+    {
      "component": "exit_logic",
-     "change": "GLD: sell half at 380, stop to 369.58; full exit on gold close < 3870 (GLD 353.50)"
+     "change": "Stop 3865 spot (below 10/30 low 3873); T1 4150, T2 4224"
     }
    ],
-   "expected_impact": "Locks in the trade the plan already holds",
+   "expected_impact": "1.19R / 1.76R",
    "key_risks": [
-    "Rejection at 4091-4156 sends gold back to 3880",
-    "Falling SMA200"
+    "Falling SMA200 and lower highs",
+    "Limit may never fill if gold breaks out first",
+    "1 MGC needs 1.3% risk"
    ],
    "kill_criteria": [
-    "Gold daily close < 3870 (GLD stop 353.50)",
-    "Weekly close < 3880"
+    "Daily close < 3865 -> stop",
+    "Close > 4150 before fill -> cancel and re-plan",
+    "No fill by 2026-11-20 -> cancel",
+    "Weekly close < 3873 -> thesis invalid"
    ],
    "minimum_viable_experiment": {
     "goal": "Paper journal",
-    "setup": "Existing GLD position",
+    "setup": "Limit 3995, stop 3865, 1 MGC",
     "metrics": [
      "R multiple",
      "MAE/MFE"
@@ -39,16 +46,16 @@
    "score_components": {
     "evidence_strength": 4,
     "mechanism_clarity": 4,
-    "feasibility": 5,
-    "expected_payoff": 3,
+    "feasibility": 4,
+    "expected_payoff": 4,
     "novelty": 2,
-    "test_efficiency": 5
+    "test_efficiency": 4
    },
    "recommendation": "pursue",
-   "rationale": "No new risk; uses the open position",
+   "rationale": "Best R:R with a structural stop",
    "confidence": "medium",
    "assumptions": [
-    "GLD tracks gold at ~1/10.95"
+    "3949-3994 now acts as support"
    ],
    "dependencies": [
     "Daily close data"
@@ -57,83 +64,30 @@
   },
   {
    "hypothesis_id": "H-002",
-   "title": "Add MGC on pullback to 3990-4000",
-   "thesis": "If gold pulls back to 3990-4000 and holds, add 1 MGC with stop 3870, targets 4156/4240.",
-   "problem_target": "Second entry with better R:R",
-   "mechanism": "Reclaimed support retest",
+   "title": "Buy a close above 4150",
+   "thesis": "A close above 4150 opens the SMA50 at 4224; buy-stop 4160, stop 4025.",
+   "problem_target": "Momentum entry",
+   "mechanism": "Breakout over resistance",
    "evidence_basis": [
-    "3955-4000 held Jun-Jul three times"
+    "Weekly range expansion"
    ],
    "proposed_rule_changes": [
     {
      "component": "entry_logic",
-     "change": "Buy limit 4000, stop 3870"
+     "change": "Buy-stop 4160, stop 4025"
     }
    ],
-   "expected_impact": "1.2R / 1.85R",
+   "expected_impact": "0.47R to 4224",
    "key_risks": [
-    "1 MGC risks $1,300 > $630 remaining gold budget",
-    "Correlated with GLD"
-   ],
-   "kill_criteria": [
-    "Close < 3870"
-   ],
-   "minimum_viable_experiment": {
-    "goal": "Paper journal",
-    "setup": "Limit 4000",
-    "metrics": [
-     "R multiple",
-     "MAE/MFE"
-    ],
-    "sample_size": "1",
-    "duration": "2-6 weeks"
-   },
-   "score_components": {
-    "evidence_strength": 3,
-    "mechanism_clarity": 4,
-    "feasibility": 1,
-    "expected_payoff": 3,
-    "novelty": 2,
-    "test_efficiency": 3
-   },
-   "recommendation": "park",
-   "rationale": "Sizer NO_TRADE: risk_below_one_contract",
-   "confidence": "medium-low",
-   "assumptions": [
-    "3955-4000 now support"
-   ],
-   "dependencies": [
-    "Daily close data"
-   ],
-   "priority_score": 0
-  },
-  {
-   "hypothesis_id": "H-003",
-   "title": "Add MGC on breakout above 4160",
-   "thesis": "A close above 4156 opens 4240-4330; buy-stop 4165, stop 4030.",
-   "problem_target": "Momentum add",
-   "mechanism": "Breakout over 11/5 high",
-   "evidence_basis": [
-    "Week range expansion"
-   ],
-   "proposed_rule_changes": [
-    {
-     "component": "entry_logic",
-     "change": "Buy-stop 4165, stop 4030"
-    }
-   ],
-   "expected_impact": "0.56R to 4240, 1.22R to 4330",
-   "key_risks": [
-    "Overhead SMA50 4230",
-    "Correlated with GLD",
+    "SMA50 right overhead",
     "Poor R:R"
    ],
    "kill_criteria": [
-    "Close < 4030"
+    "Close < 4025"
    ],
    "minimum_viable_experiment": {
     "goal": "Paper journal",
-    "setup": "Buy-stop 4165",
+    "setup": "Buy-stop 4160",
     "metrics": [
      "R multiple",
      "MAE/MFE"
@@ -144,13 +98,61 @@
    "score_components": {
     "evidence_strength": 2,
     "mechanism_clarity": 3,
-    "feasibility": 1,
-    "expected_payoff": 2,
+    "feasibility": 3,
+    "expected_payoff": 1,
     "novelty": 2,
     "test_efficiency": 3
    },
    "recommendation": "reject",
-   "rationale": "Thin reward into SMA50 and over budget",
+   "rationale": "Reward too thin before the SMA50",
+   "confidence": "low",
+   "assumptions": [],
+   "dependencies": [],
+   "priority_score": 0
+  },
+  {
+   "hypothesis_id": "H-003",
+   "title": "Buy now at 4069",
+   "thesis": "Enter at market after the rebound week.",
+   "problem_target": "Do not miss the move",
+   "mechanism": "Momentum continuation",
+   "evidence_basis": [
+    "Week +4.5%"
+   ],
+   "proposed_rule_changes": [
+    {
+     "component": "entry_logic",
+     "change": "Market 4069, stop 3865"
+    }
+   ],
+   "expected_impact": "0.4R to 4150",
+   "key_risks": [
+    "Buying under resistance",
+    "1 MGC risk $2,040 > 2% cap"
+   ],
+   "kill_criteria": [
+    "Close < 3865"
+   ],
+   "minimum_viable_experiment": {
+    "goal": "Paper journal",
+    "setup": "Market",
+    "metrics": [
+     "R multiple",
+     "MAE/MFE"
+    ],
+    "sample_size": "1",
+    "duration": "2-6 weeks"
+   },
+   "score_components": {
+    "evidence_strength": 2,
+    "mechanism_clarity": 2,
+    "feasibility": 2,
+    "expected_payoff": 1,
+    "novelty": 1,
+    "test_efficiency": 3
+   },
+   "recommendation": "reject",
+   "rationale": "Above the 2% cap and buys into resistance",
    "confidence": "low",
    "assumptions": [],
    "dependencies": [],
