@@ -48,6 +48,8 @@ Plan → Trade → Record 루프 순서대로 아래 스킬을 자동으로 검�
    - 뉴스 헤드라인 보강: `py -c "import yfinance as yf; [print(n) for n in yf.Ticker('TICKER').news[:15]]"`로
      최근 기사를 받아 커뮤니티 여론(last30days)과 언론 보도를 구분해 적는다. 별도 뉴스 스킬은 설치하지 않았다
      (staskh `news-sentiment`가 하는 일이 이 한 줄이라 2026-11-14 판단으로 생략).
+     Yahoo가 막히면(`YFDataException: YAHOO! FINANCE IS CURRENTLY DOWN`, 2026-11-14 실제 발생) 뉴스는 웹 검색으로,
+     가격 일봉은 FMP(`/stable/historical-price-eod/full`, 무료 키로 되는 종목만)로 대체하고 리포트 각주에 적는다.
 
 3-F. **펀더멘털·밸류에이션 (개별 주식만, ETF·원자재는 생략)** — 가격이 싼지 비싼지, 사업이 좋아지는지 나빠지는지.
    - **stock-eval**로 실적 추세·마진·재무 건전성·밸류에이션(P/E, EV/EBITDA, 동종 대비)을 본다. 데이터는 yfinance
