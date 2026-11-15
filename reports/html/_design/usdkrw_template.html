@@ -1,0 +1,417 @@
+<title>USD/KRW 기술적 분석 2026-11-15</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@700;800&family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* 레이아웃: 어두운 '장 마감 후' 히어로 밴드에 주석 차트를 크게 깔고, 아래는 근거 → 실행 → 점검 순서의 리서치 노트 */
+:root{
+  --bg:#eef1f5; --surface:#ffffff; --sunk:#e4e9f0; --ink:#0f1a2a; --muted:#536075; --line:#d3dae4;
+  --accent:#1f4f8a; --good:#137044; --bad:#b8352a; --warn:#9a5f0c;
+  --good-t:rgba(19,112,68,.13); --bad-t:rgba(184,53,42,.11); --accent-t:rgba(31,79,138,.10);
+  /* 히어로는 두 테마 모두 '야간 시장' 톤으로 고정 */
+  --h-bg:#0c1522; --h-bg2:#13233a; --h-fg:#eef2f8; --h-muted:#9aa8bd; --h-line:rgba(154,168,189,.18);
+  --h-good:#5fd39a; --h-bad:#ff8b7b; --h-warn:#f2b45a; --h-accent:#8fbaf3;
+  --display:"Nanum Myeongjo","Batang",serif;
+  --sans:"IBM Plex Sans KR","Malgun Gothic",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0a0f17; --surface:#111a26; --sunk:#0d1520; --ink:#e7ecf3; --muted:#95a2b6; --line:#223042;
+  --accent:#86b2ee; --good:#55c98d; --bad:#f2806f; --warn:#e9ad52;
+  --good-t:rgba(85,201,141,.15); --bad-t:rgba(242,128,111,.14); --accent-t:rgba(134,178,238,.12);
+  --h-bg:#070c14; --h-bg2:#0f1c2f; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0a0f17; --surface:#111a26; --sunk:#0d1520; --ink:#e7ecf3; --muted:#95a2b6; --line:#223042;
+  --accent:#86b2ee; --good:#55c98d; --bad:#f2806f; --warn:#e9ad52;
+  --good-t:rgba(85,201,141,.15); --bad-t:rgba(242,128,111,.14); --accent-t:rgba(134,178,238,.12);
+  --h-bg:#070c14; --h-bg2:#0f1c2f; color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15.5px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+::selection{background:var(--accent);color:var(--surface)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.num,td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.in{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- 히어로 ---------- */
+.hero{background:radial-gradient(120% 90% at 85% 0%,var(--h-bg2),var(--h-bg) 60%);color:var(--h-fg)}
+.hero .in{padding-block:44px 28px;display:grid;gap:26px}
+.hero-top{display:grid;grid-template-columns:1fr auto;gap:24px 40px;align-items:end}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,4.4vw,3.3rem);line-height:1.22;letter-spacing:-.01em;max-width:18ch}
+.hero h1 em{font-style:normal;color:var(--h-bad)}
+.meta{color:var(--h-muted);font-size:.9rem;margin-top:14px}
+.meta b{color:var(--h-fg);font-weight:600}
+.quote{text-align:right;display:grid;gap:2px}
+.quote .px{font-family:var(--mono);font-size:clamp(2.4rem,5.5vw,4rem);font-weight:500;line-height:1;letter-spacing:-.03em}
+.quote .chg{font-family:var(--mono);color:var(--h-bad);font-size:1rem}
+.quote small{color:var(--h-muted);font-size:.8rem}
+.readout{display:flex;flex-wrap:wrap;gap:6px 22px;font-size:.82rem;color:var(--h-muted)}
+.readout b{font-family:var(--mono);color:var(--h-fg);font-weight:500}
+.readout i{display:inline-block;width:16px;height:3px;vertical-align:middle;margin-right:6px;border-radius:2px}
+.hchart{overflow-x:auto;margin-inline:-6px}
+.hchart svg:focus-visible{outline:2px solid var(--h-accent);outline-offset:4px}
+.hchart svg{display:block;width:100%;min-width:640px;height:auto;touch-action:pan-y}
+.h-grid{stroke:var(--h-line)}
+.h-ax{fill:var(--h-muted);font-family:var(--mono);font-size:11px}
+.h-lab{font-family:var(--sans);font-size:12.5px;font-weight:500}
+.h-g{fill:var(--h-good)}.h-r{fill:var(--h-bad)}
+.h-px{fill:none;stroke:var(--h-fg);stroke-width:2.2;stroke-linejoin:round}
+.h-ma50{fill:none;stroke:var(--h-accent);stroke-width:1.5}
+.h-ma200{fill:none;stroke:var(--h-warn);stroke-width:1.5;stroke-dasharray:6 4}
+.h-sup{fill:rgba(95,211,154,.17)}
+.h-gap{fill:rgba(255,139,123,.16);stroke:rgba(255,139,123,.5);stroke-dasharray:3 3}
+.h-trig{stroke:var(--h-good);stroke-dasharray:2 4}
+.h-stop{stroke:var(--h-bad);stroke-dasharray:2 4}
+.h-cross{stroke:var(--h-muted);stroke-width:1}
+.h-end{fill:var(--h-bad);stroke:var(--h-bg);stroke-width:2}
+
+.calls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--h-line)}
+.calls>div{padding:18px 20px 4px 0;display:grid;gap:4px;min-width:0}
+.calls>div+div{padding-left:20px;border-left:1px solid var(--h-line)}
+.calls span{font-size:.8rem;color:var(--h-muted)}
+.calls b{font-size:1.15rem;font-weight:600}
+.calls p{font-size:.85rem;color:var(--h-muted)}
+
+/* ---------- 본문 ---------- */
+main .in{display:grid;gap:72px;padding-block:56px 72px}
+section{display:grid;gap:22px;min-width:0}
+.sh{display:grid;gap:8px;max-width:68ch}
+.sh h2{font-family:var(--display);font-weight:800;font-size:clamp(1.45rem,2.6vw,1.95rem);line-height:1.3}
+.sh p{color:var(--muted)}
+.lede{font-size:1.08rem;max-width:62ch}
+.lede strong{font-weight:700}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.78rem;font-weight:600;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.p-g{color:var(--good);background:var(--good-t)}.p-r{color:var(--bad);background:var(--bad-t)}
+.p-w{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}.p-a{color:var(--accent);background:var(--accent-t)}
+.g{color:var(--good)}.r{color:var(--bad)}.w{color:var(--warn)}.m{color:var(--muted)}
+
+/* 판단 블록 */
+.verdict{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:start}
+.holder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px 22px;display:grid;gap:8px}
+.holder h3{font-size:1rem}
+.holder p{color:var(--muted);font-size:.93rem}
+
+/* 기술 + 사다리 */
+.tech{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:40px;align-items:start}
+.facts{display:grid;gap:18px}
+.fact{display:grid;grid-template-columns:5.5em 1fr;gap:14px;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.fact:last-child{border-bottom:0}
+.fact dt{font-weight:700}
+.fact dd{margin:0;color:var(--muted)}
+.fact dd .num{color:var(--ink)}
+.ladder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 8px;overflow-x:auto}
+.ladder svg{display:block;width:100%;min-width:420px;height:auto}
+.l-axis{stroke:var(--line);stroke-width:2}
+.l-tick{stroke:var(--muted)}
+.l-ax{fill:var(--muted);font-family:var(--mono);font-size:11px}
+.l-risk{fill:var(--bad-t)}.l-rew{fill:var(--good-t)}
+.l-b-g{fill:var(--good)}.l-b-r{fill:var(--bad)}
+.l-lv{stroke-width:1.5}
+.l-lab{font-size:13px}
+.l-p{font-family:var(--mono);font-weight:600}
+.l-sub{fill:var(--muted)}
+.c-g{stroke:var(--good);fill:var(--good)}.c-r{stroke:var(--bad);fill:var(--bad)}.c-a{stroke:var(--accent);fill:var(--accent)}
+.c-f{stroke:var(--ink);fill:var(--ink)}.c-m{stroke:var(--muted);fill:var(--muted)}
+.l-r{fill:var(--bad);font-family:var(--mono);font-size:12px;font-weight:600}
+.l-w{fill:var(--good);font-family:var(--mono);font-size:12px;font-weight:600}
+.l-now{fill:var(--ink);stroke:var(--surface);stroke-width:2}
+
+/* 매크로 */
+.gauge{display:grid;gap:10px;max-width:760px}
+.gtrack{position:relative;height:14px;border-radius:7px;background:linear-gradient(90deg,var(--bad-t),var(--sunk) 45%,var(--good-t))}
+.gmark{position:absolute;top:-6px;width:3px;height:26px;border-radius:2px;background:var(--ink);transform:translateX(-50%)}
+.gmark.prev{background:var(--muted);opacity:.55}
+.gmark span{position:absolute;top:30px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:.8rem;color:var(--muted)}
+.gmark.now span{color:var(--ink);font-weight:600}
+.gscale{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.75rem;color:var(--muted);padding-top:22px}
+.mtable{display:grid;gap:0;border-top:1px solid var(--line)}
+.mrow{display:grid;grid-template-columns:11em minmax(80px,1fr) 2.5em minmax(0,15em);gap:16px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.mname{display:grid}
+.mname span{font-family:var(--mono);font-size:.75rem;color:var(--muted)}
+.mtrack{height:8px;background:var(--sunk);border-radius:4px;overflow:hidden}
+.mtrack i{display:block;height:100%;background:var(--accent);border-radius:4px}
+.mval{text-align:right;font-weight:600}
+.mnote{color:var(--muted);font-size:.88rem}
+
+/* 시나리오 */
+.split{display:flex;height:46px;border-radius:8px;overflow:hidden;font-family:var(--mono);font-weight:600}
+.split>div{display:flex;align-items:center;padding-inline:14px;color:var(--surface)}
+.s-bear{flex:30;background:var(--bad)}.s-base{flex:45;background:var(--warn)}.s-bull{flex:25;background:var(--good)}
+.scen{display:grid;grid-template-columns:30fr 45fr 25fr;gap:0}
+.scen article{padding:14px 18px 0 0;display:grid;gap:6px;align-content:start}
+.scen article+article{padding-left:18px;border-left:1px solid var(--line)}
+.scen h3{font-size:1rem}
+.scen p{color:var(--muted);font-size:.92rem}
+.axisnote{display:flex;justify-content:space-between;font-size:.78rem;color:var(--muted)}
+
+/* 가설 표 */
+.tbl{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{padding:13px 16px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:500;color:var(--muted);font-size:.8rem}
+tr:last-child td{border-bottom:0}
+tr.pick td{background:var(--good-t)}
+td.n{white-space:nowrap}
+.kill{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kill div{border-top:2px solid var(--bad);padding-top:10px;display:grid;gap:2px}
+.kill b{font-size:.95rem}
+.kill span{color:var(--muted);font-size:.88rem}
+
+/* 주문표 */
+.exec{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+.ticket{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;box-shadow:0 12px 32px -18px rgba(15,26,42,.35)}
+.ticket header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:14px 20px;background:var(--sunk);font-size:.82rem;color:var(--muted)}
+.ticket header b{color:var(--ink);font-family:var(--mono)}
+.ticket dl{margin:0;display:grid;grid-template-columns:auto 1fr;font-size:.93rem}
+.ticket dt,.ticket dd{padding:10px 20px;border-top:1px solid var(--line);margin:0}
+.ticket dt{color:var(--muted)}
+.ticket dd{font-variant-numeric:tabular-nums;text-align:right;font-weight:500}
+.ticket .tot{font-weight:700}
+.rules{display:grid;gap:14px}
+.rules p{color:var(--muted)}
+.rules strong{color:var(--ink)}
+
+/* 루프 */
+.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.loop>div{background:var(--surface);padding:16px 18px;display:grid;gap:6px;align-content:start;min-width:0}
+.loop .k{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.loop .pill{justify-self:start}
+.loop b{font-size:.95rem}
+.loop p{font-size:.84rem;color:var(--muted)}
+.loop .skip{background:var(--sunk)}
+
+footer{border-top:1px solid var(--line)}
+footer .in{padding-block:28px 40px;display:grid;gap:8px;font-size:.83rem;color:var(--muted);max-width:1080px}
+footer p{max-width:90ch}
+
+@media (max-width:860px){
+  .hero-top,.verdict,.tech,.exec{grid-template-columns:1fr}
+  .quote{text-align:left}
+  .loop{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mrow{grid-template-columns:8.5em minmax(60px,1fr) 2.2em}
+  .mnote{grid-column:1/-1;margin-top:-6px}
+}
+@media (max-width:560px){
+  .calls{grid-template-columns:1fr}
+  .calls>div+div{padding-left:0;border-left:0;border-top:1px solid var(--h-line)}
+  .calls>div{padding-bottom:14px}
+  .scen,.kill{grid-template-columns:1fr}
+  .scen article+article{padding-left:0;border-left:0;border-top:1px solid var(--line)}
+  .scen article{padding-bottom:12px}
+  .split>div{padding-inline:8px;font-size:.85rem}
+  .loop{grid-template-columns:1fr}
+}
+</style>
+
+<div class="hero">
+  <div class="in">
+    <div class="hero-top">
+      <div>
+        <h1>원화 강세 사이클, <em>1,349</em>를 다시 넘지 못하면 1,300까지 열린다</h1>
+        <p class="meta"><b>USD/KRW</b> 원·달러 환율 · 2026-11-15 기준 · 페이퍼 트레이딩 리포트</p>
+      </div>
+      <div class="quote">
+        <div class="px">1,336.20</div>
+        <div class="chg" style="color:var(--h-good)">1m +0.2% · 3m −3.8% · 1y −9.0%</div>
+        <small>52주 범위 1,321.76 ~ 1,554.48 · 10/26 저점 1,321.76</small>
+      </div>
+    </div>
+    <div class="readout" aria-live="polite">
+      <span><b id="rd">2026-11-15 · 1336.20</b></span>
+      <span><i style="background:var(--h-fg)"></i>종가</span>
+      <span><i style="background:var(--h-accent)"></i>50일선 ≈ MA60 1,349</span>
+      <span><i style="background:var(--h-warn)"></i>200일선 1,441</span>
+    </div>
+    <div class="hchart">{{HERO}}</div>
+    <div class="calls">
+      <div><span>지금</span><b>달러 롱 비권장 · 숏 대기</b><p>역배열 유지, 1,349 저항 아래 횡보</p></div>
+      <div><span>진입 조건 (달러 숏)</span><b class="num" style="color:var(--h-good)">1,345 ~ 1,349 반등</b><p>MA60 저항 재터치 시 분할 숏</p></div>
+      <div><span>무효화</span><b class="num" style="color:var(--h-bad)">1,355 종가 돌파</b><p>또는 1,320 이탈 시 하락 가속 추격</p></div>
+    </div>
+  </div>
+</div>
+
+<main><div class="in">
+
+<section class="verdict">
+  <div class="sh">
+    <h2>MA60 저항 아래 횡보 중, 1,349 재돌파 실패 시 숏</h2>
+    <p class="lede">1년간 1,554 → 1,321, 약 9% 하락으로 달러 약세 사이클이 뚜렷합니다. 11/6 장중 1,364 급반등은 상단 긴 꼬리(<strong>고가권 비석형 캔들</strong>)로 반전됐고, MA20·MA60·MA120·MA200이 모두 위에 있는 완전 역배열입니다. 돌파·지지·재돌파 3박자가 성립하지 않아 달러 롱 근거는 없고, <strong>1,345~1,349 반등 시 분할 숏</strong>이 리스크/보상이 가장 좋습니다.</p>
+  </div>
+  <div class="holder">
+    <span><span class="pill p-w">이미 달러 롱 보유자라면</span></span>
+    <h3>1,349 2회 실패 시 비중 축소, 1,320 깨면 전량 손절</h3>
+    <p>MA60(1,349) 재돌파를 2회 이상 실패하면 비중을 절반으로 줄이고, 10/26 저점 1,321을 종가로 깨면 전량 손절합니다. 평단 낮추기 위한 추가 매수(물타기)는 금지합니다.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>기술적 현황과 가격 사다리</h2>
+    <p>오른쪽 사다리는 실제 가격 축척입니다. 빨간 구간은 숏 진입 후 리스크(1R, 1,349 → 1,355), 초록 구간은 목표 2(1,300)까지의 보상입니다.</p>
+  </div>
+  <div class="tech">
+    <dl class="facts">
+      <div class="fact"><dt>추세</dt><dd>2026년 초 <span class="num">1,460</span>대 → 11월 <span class="num">1,336</span>. 완전 역배열(가격 &lt; MA5 &lt; MA20 &lt; MA60 &lt; MA120 &lt; MA200). MA60 <span class="num">1,349</span>, MA120 <span class="num">1,417</span>, MA200 <span class="num">1,441</span>.</dd></div>
+      <div class="fact"><dt>캔들</dt><dd>11/6 시가 <span class="num">1,357</span>, 장중 고가 <span class="num">1,364.72</span>, 종가 <span class="num">1,356</span> — 전형적 <b>고가권 비석형</b>. 이후 1,336까지 하락하며 반전 확정. 11/15 현재 MA5·MA20이 1,336~1,338에서 수렴 횡보.</dd></div>
+      <div class="fact"><dt>모멘텀</dt><dd>1m <span class="num">+0.2%</span>, 3m <span class="num">−3.8%</span>, 1y <span class="num">−8.98%</span>. 하락 속도 둔화 중이나 반등 전환 신호는 아직 부재.</dd></div>
+      <div class="fact"><dt>지지</dt><dd>10/26 52주 저점 <span class="num">1,321.76</span>, 11/12 재시험 저점 <span class="num">1,327</span>. 1,321~1,335 구간이 단기 지지대. 쌍바닥 확정은 미정.</dd></div>
+      <div class="fact"><dt>저항</dt><dd>1차 MA60 <span class="num">1,349.35</span>, 2차 11/6 고점 <span class="num">1,364.72</span>, 3차 MA120~MA200 밀집대 <span class="num">1,417~1,441</span>.</dd></div>
+      <div class="fact"><dt>거래량</dt><dd>FX 스팟 지수(KRW=X)는 거래량 데이터 없음. 대체 지표로 일일 변동폭(1m 평균 <span class="num">12원</span>, 11/6 당일 <span class="num">34원</span>)과 캔들 몸통 크기로 판정.</dd></div>
+    </dl>
+    <div class="ladder">{{LADDER}}</div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>매크로 맥락: 달러 약세 사이클 + 금리차 축소</h2>
+    <p>FX는 이 폴더의 자동 macro-regime-detector 대상이 아니므로 종합 점수는 주식용 참고치입니다. 환율에는 달러 사이클·금리차·리스크 선호가 더 직접 영향을 줍니다.</p>
+  </div>
+  <div class="gauge" role="img" aria-label="FX 매크로 점수 45, 직전 55">
+    <div class="gtrack">
+      <div class="gmark prev" style="left:55%"><span>3개월 전 · 55 (달러 우위)</span></div>
+      <div class="gmark now" style="left:45%"><span>현재 · 45 (원화 우위)</span></div>
+    </div>
+    <div class="gscale"><span>원화 강세 0</span><span>중립 50</span><span>달러 강세 100</span></div>
+  </div>
+  <div class="mtable">{{MACRO}}</div>
+  <p class="m" style="max-width:68ch">USD/KRW에 주는 의미: 달러 사이클 둔화, 한미 금리차 축소, 아시아 리스크 선호 회복이 모두 원화 강세 방향. 매크로가 기술적 역배열과 같은 방향을 가리키므로 숏 편향이 정당화됩니다.</p>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>최근 30일 여론 (뉴스·시장 톤)</h2>
+    <p>FX는 자동 last30days 루프 대상이 아니므로 간이 요약입니다. 종목 분석에서는 반드시 last30days 스킬을 실행합니다.</p>
+  </div>
+  <dl class="facts" style="max-width:72ch">
+    <div class="fact"><dt>10월 중순</dt><dd>미 CPI 둔화·연준 12월 인하 기대로 달러 전반 약세. USD/KRW는 1,340대 하락 유지.</dd></div>
+    <div class="fact"><dt>10/26</dt><dd>52주 저점 <span class="num">1,321.76</span> 터치 — 삼성전자·SK하이닉스 외인 순매수 유입과 맞물림.</dd></div>
+    <div class="fact"><dt>11/6</dt><dd>장중 급등 <span class="num">1,364</span> — 연준 위원 매파 발언으로 달러 숏커버 1일. 당일 상단 꼬리로 반전.</dd></div>
+    <div class="fact"><dt>11/10~15</dt><dd>1,330~1,345 박스. 시장 톤 "달러 추가 상승 제한, BOK 11월 회의 관망". 양쪽 뉴스 혼재.</dd></div>
+  </dl>
+  <p class="m" style="max-width:68ch">공식 소셜 센티먼트 집계는 생략. 위 내용은 가격 반응과 공개 보도를 종합한 요약이며, 개별 커뮤니티 의견이 아닙니다.</p>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>반대 논리 (달러 강세 시나리오)</h2>
+    <p>결론을 내리기 전 의도적으로 반대편을 세웁니다.</p>
+  </div>
+  <dl class="facts" style="max-width:72ch">
+    <div class="fact"><dt>연준 매파</dt><dd>12월 FOMC에서 인하 지연 시사 또는 점도표 상향 → 달러 즉시 반등. 1,349 돌파 가능. <b>드러날 신호:</b> 1,355 종가 돌파 + 일일 변동폭 25원 이상.</dd></div>
+    <div class="fact"><dt>지정학</dt><dd>중동·대만 이벤트 → 안전자산 달러 수요. KOSPI 동시 하락이 동반되면 환율 갭 상승. <b>드러날 신호:</b> KOSPI −3% + USD/KRW +1.5% 동시 발생.</dd></div>
+    <div class="fact"><dt>한국 수출 둔화</dt><dd>반도체 사이클 피크아웃으로 외인 자금 유출 재개. <b>드러날 신호:</b> 외인 코스피 5일 연속 순매도 + 1,355 상향 돌파.</dd></div>
+  </dl>
+  <p class="m">세 조건 모두 <b>1,355 종가 돌파</b>가 공통 트리거. 이 선이 지켜지는 한 반대 논리는 비활성 상태.</p>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>향후 2~6주 시나리오</h2>
+    <p>가격 방향 순서로 놓았습니다. 왼쪽이 하락(원화 강세), 오른쪽이 상승(달러 강세).</p>
+  </div>
+  <div style="display:grid;gap:8px">
+    <div class="split" role="img" aria-label="약세 50%, 기본 35%, 강세 15%">
+      <div class="s-bear" style="flex:50">50%</div><div class="s-base" style="flex:35">35%</div><div class="s-bull" style="flex:15">15%</div>
+    </div>
+    <div class="axisnote"><span>← 1,300~1,322</span><span>1,322~1,355 박스</span><span>1,364~1,417 →</span></div>
+  </div>
+  <div class="scen">
+    <article><h3 class="r">약세 (원화 강세) · 지지 이탈</h3><p>1,321 하향 이탈 시 1,300 심리적 지지까지. MA200(1,441) 역배열이 하방을 지지. 확률 50%.</p></article>
+    <article><h3 class="w">기본 · 박스권</h3><p>1,322~1,355 사이에서 2~4주 횡보. MA20 1,336 중심 수렴. 쌍바닥 다지기. 확률 35%.</p></article>
+    <article><h3 class="g">강세 (달러 강세) · 저항 돌파</h3><p>1,355 종가 돌파 + 거래량 동반이면 MA120(1,417)까지 되돌림. FOMC 매파 서프라이즈 필요. 확률 15%.</p></article>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>판단 카드</h2>
+    <p>분석의 최종 결과. 이것만 보고도 매매 판단이 가능하도록 모든 핵심을 담았습니다.</p>
+  </div>
+  <div class="verdict">
+    <div class="holder" style="background:var(--good-t);border-color:var(--good)">
+      <span><span class="pill p-g">결론</span></span>
+      <h3>달러 숏 (원화 롱) 조건부 · 확신도 보통</h3>
+      <p>1,345~1,349 반등 시 분할 숏. 손절 1,355 종가 위, 1차 목표 1,322, 2차 1,300. 손익비 약 1:3. 달러 롱은 1,355 종가 돌파 전까지 비권장.</p>
+    </div>
+    <div class="holder">
+      <span><span class="pill p-a">다음 점검일</span></span>
+      <h3>12월 FOMC · 11월 BOK 회의</h3>
+      <p>12월 FOMC 점도표가 가장 큰 트리거. BOK 11월 회의에서 금리차 변화도 확인. 이벤트 전 48시간은 신규 진입 보류.</p>
+    </div>
+  </div>
+
+  <div class="tbl"><table>
+    <tr><th>신호</th><th>점수</th><th>근거</th></tr>
+    <tr><td>매크로</td><td class="n r">−1</td><td>달러 약세 사이클, 한미 금리차 축소, 아시아 리스크 선호 회복</td></tr>
+    <tr><td>추세 (이평선)</td><td class="n r">−1</td><td>완전 역배열, MA60/120/200 모두 위 저항. 기울기 반전 신호 부재</td></tr>
+    <tr><td>모멘텀</td><td class="n">0</td><td>3m −3.8%이나 1m +0.2% — 하락 속도 둔화, 중립</td></tr>
+    <tr><td>캔들</td><td class="n r">−1</td><td>11/6 고가권 비석형 (상단 꼬리, 당일 반전)</td></tr>
+    <tr><td>바닥 신호</td><td class="n">0</td><td>1,321 쌍바닥 미확정, 거래량 돌파 없음</td></tr>
+    <tr><td>여론·뉴스</td><td class="n r">−1</td><td>연준 인하 기대 + 외인 자금 유입이 원화 강세 지지</td></tr>
+    <tr><td>이벤트</td><td class="n">0</td><td>12월 FOMC까지 불확실 — 양방향 리스크</td></tr>
+    <tr><td>반대 논리</td><td class="n">0</td><td>FOMC 매파·지정학 리스크 상존 (1,355 종가 돌파 시 발동)</td></tr>
+  </table></div>
+
+  <div class="kill" style="margin-top:8px">
+    <div><b class="g">숏 진입 조건</b><span>1,345~1,349 분할 숏, 손절 1,355 종가, 목표 1,322 / 1,300</span></div>
+    <div><b class="r">판단을 바꿀 상방</b><span>1,355 종가 돌파 + 일변동 25원↑ → 역배열 균열, 롱 전환 검토</span></div>
+    <div><b class="g">판단을 바꿀 하방</b><span>1,320 종가 이탈 → 1,300 추격 숏, 손절 1,335</span></div>
+  </div>
+</section>
+
+<section>
+  <div class="sh">
+    <h2>분석 단계 요약</h2>
+    <p>CLAUDE.md 자동 루프를 FX에 맞춰 적용한 결과입니다.</p>
+  </div>
+  <div class="loop">
+    <div><span class="k">1 · 매크로 국면</span><b>달러 약세 사이클</b><p>FX 전용 간이 평가 (45/100)</p></div>
+    <div><span class="k">2 · 기술적 분석</span><b>역배열 횡보</b><p>차트불꽃기 노트의 비석형 + MA20 저항 패턴 적용</p></div>
+    <div class="skip"><span class="k">3-S · 여론 (last30days)</span><b>간이 요약</b><p>FX는 공식 스킬 대상 외</p></div>
+    <div class="skip"><span class="k">3-F · 펀더멘털</span><b>해당 없음</b><p>FX 스팟은 재무제표 없음</p></div>
+    <div><span class="k">3-B · 반대 논리</span><b>FOMC·지정학·수출</b><p>공통 트리거 1,355</p></div>
+    <div><span class="k">4 · 판단 카드</span><span class="pill p-g">숏 조건부</span><p>1,349 트리거, 손절 1,355, 목표 1,322/1,300</p></div>
+    <div class="skip"><span class="k">5 · 사이징</span><b>생략</b><p>사용자 CLAUDE.md 규칙 (2026-11-14 결정)</p></div>
+    <div class="skip"><span class="k">6 · 게이트</span><b>생략</b><p>사용자 CLAUDE.md 규칙</p></div>
+  </div>
+</section>
+
+</div></main>
+
+<footer><div class="in">
+  <p>데이터: USD/KRW 일봉은 yfinance <span class="num">KRW=X</span> 티커 기준 (261거래일). MA60 1,349.35, MA120 1,416.65, MA200 1,441.32는 11/15 종가 기준 단순이평.</p>
+  <p>적용 패턴 (차트불꽃기 노트): ① 고가권 비석형 캔들 (11/6) ② MA20 저항화 ③ 돌파·지지·재돌파 3박자 미성립. 핵심 원칙 6가지 중 기준선(1,349·1,355), 거래량 동반(일변동 25원+), 5일선 이탈 손절을 매매 체크리스트로 사용.</p>
+  <p>FX 스팟은 거래량 데이터 없음 → "거래량 동반 돌파" 원칙은 일일 변동폭·캔들 몸통으로 대체. FX는 이 폴더 자동 루프(macro-regime-detector·last30days)의 공식 대상이 아니므로 간이 분석입니다. <b>페이퍼 트레이딩 전제</b>, 실거래 전 반드시 추가 검증.</p>
+</div></footer>
+
+<script>
+(function(){
+  var S={{SERIES}}, G={{GEOM}};
+  var svg=document.getElementById('hc'), zone=document.getElementById('hz'),
+      cx=document.getElementById('hx'), dot=document.getElementById('hd'), rd=document.getElementById('rd');
+  if(!svg) return;
+  var X=function(k){return G.L+(G.W-G.L-G.R)*k/(G.N-1)},
+      Y=function(p){return G.T+(G.H-G.T-G.B)*(G.hi-p)/(G.hi-G.lo)};
+  function show(k){
+    var p=S[k]; cx.setAttribute('x1',X(k)); cx.setAttribute('x2',X(k)); cx.setAttribute('visibility','visible');
+    dot.setAttribute('cx',X(k)); dot.setAttribute('cy',Y(p[1])); rd.textContent=p[0]+' · '+p[1].toFixed(2);
+  }
+  function reset(){ cx.setAttribute('visibility','hidden'); show(G.N-1); cx.setAttribute('visibility','hidden'); }
+  zone.addEventListener('pointermove',function(e){
+    var r=svg.getBoundingClientRect(), x=(e.clientX-r.left)/r.width*G.W;
+    show(Math.max(0,Math.min(G.N-1,Math.round((x-G.L)/(G.W-G.L-G.R)*(G.N-1)))));
+  });
+  zone.addEventListener('pointerleave',reset);
+  var cur=G.N-1;
+  svg.addEventListener('keydown',function(e){
+    var d=e.key==='ArrowLeft'?-1:e.key==='ArrowRight'?1:0; if(!d) return;
+    e.preventDefault(); cur=Math.max(0,Math.min(G.N-1,cur+d)); show(cur);
+  });
+  svg.addEventListener('blur',reset);
+  var box=svg.parentElement; if(box.scrollWidth>box.clientWidth) box.scrollLeft=box.scrollWidth;
+})();
+</script>
