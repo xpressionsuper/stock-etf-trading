@@ -267,6 +267,30 @@ footer p{max-width:90ch}
 
 <section>
   <div class="sh">
+    <h2>차트불꽃기 패턴 적용</h2>
+    <p>한국어 트레이딩 교재 노트(<code>notes/chart_bulkkotgi_notes.md</code>)의 캔들·이평선 기법을 USD/KRW 현재 상황에 매칭했습니다. ✓는 성립, ✗는 미성립, △는 조건부.</p>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>구분</th><th>책의 기법</th><th>USD/KRW 현재 (11/15)</th><th>신호</th></tr>
+    <tr><td>캔들</td><td><b>고가권 비석형</b> — 대량 변동 뒤 상단 긴 꼬리 → 하락 반전, 당일 청산 원칙</td><td>11/6 시가 1,357 / 고가 1,364.72 / 종가 1,356 → 완벽한 상단 꼬리. 이후 1,336까지 되돌림</td><td><span class="pill p-r">✓ 매도 신호</span></td></tr>
+    <tr><td>캔들</td><td><b>하락장악형</b> — 전일 양봉 몸통을 다음 음봉이 감싸면 추가 하락</td><td>11/9 양봉(1,343→1,363) 다음 11/10 음봉(1,347→1,344)으로 몸통 미감쌈</td><td><span class="pill p-w">△ 부분</span></td></tr>
+    <tr><td>캔들</td><td><b>저가권 도지/해머</b> — 바닥에서 거래량 동반 시 쌍바닥</td><td>10/26 저점 1,321.76 이후 반등했으나 거래량(일변동폭) 뒷받침 없음</td><td><span class="pill p-r">✗ 미성립</span></td></tr>
+    <tr><td>이평선</td><td><b>20일선 돌파 (3박자)</b> — 돌파 → 지지 → 재돌파 + 거래량 동반</td><td>MA20 1,336이 지지가 아닌 저항으로 작동. 돌파 시도 → 재하락 반복</td><td><span class="pill p-r">✗ 롱 근거 없음</span></td></tr>
+    <tr><td>이평선</td><td><b>520 기법</b> — 5·20선 동시 골드크로스 + 기울기 반전</td><td>MA5(1,338) ≈ MA20(1,336) 수렴하지만 MA20 기울기 하향 유지</td><td><span class="pill p-r">✗ 미성립</span></td></tr>
+    <tr><td>이평선</td><td><b>완전 역배열</b> — 가격 &lt; 5 &lt; 20 &lt; 60 &lt; 120 &lt; 200, 매수 금지</td><td>1,336 &lt; MA5 1,338 ≈ MA20 1,336 &lt; MA60 1,349 &lt; MA120 1,417 &lt; MA200 1,441</td><td><span class="pill p-r">✓ 롱 금지</span></td></tr>
+    <tr><td>이평선</td><td><b>MA60 돌파 기법</b> — MA60 수렴·장대양봉·거래량 동반</td><td>MA60 1,349가 저항. 접근 시 위축, 돌파 실패 패턴</td><td><span class="pill p-g">△ 역방향 숏 근거</span></td></tr>
+    <tr><td>구간</td><td><b>고점권</b> — 비석형·고가권 도지 → 당일 청산 또는 숏</td><td>단기 고점(11/6 1,364)에서 비석형 발생 후 하락 → 책이 말하는 고점권 숏 구간</td><td><span class="pill p-g">✓ 숏 구간</span></td></tr>
+  </table></div>
+
+  <dl class="facts" style="max-width:72ch;margin-top:12px">
+    <div class="fact"><dt>종합</dt><dd>책의 8개 체크포인트 중 <b>롱 신호 0개 / 숏 신호 3개 / 미성립 3개 / 조건부 2개</b>. 핵심 원칙 6가지 중 ① 기준선(1,349·1,355) ② 돌파·지지·재돌파 ③ 거래량(일변동 25원+) 동반 모두 롱 진입 조건 미충족. <b>책의 기준으로도 달러 롱 금지 / 숏 조건부</b>가 결론입니다.</dd></div>
+    <div class="fact"><dt>손절 원칙</dt><dd>책은 "<b>손절은 5일선 이탈 또는 기준선 이탈로 기계적으로</b>" 강조. 숏 손절은 MA5(1,338) 돌파가 아닌 숏 트리거 위 1,355 종가 — 책의 원칙과 일치.</dd></div>
+    <div class="fact"><dt>FX 적용 한계</dt><dd>책은 한국 주식 일봉 사례(5·20·60·120일선 + 거래량) 기반. FX 스팟은 거래량이 없어 일일 변동폭과 캔들 몸통으로 대체 — 대부분의 캔들·이평 원칙은 그대로 적용 가능하나, "대량거래 비석형" 같은 거래량 특화 기법은 간접 판정.</dd></div>
+  </dl>
+</section>
+
+<section>
+  <div class="sh">
     <h2>매크로 맥락: 달러 약세 사이클 + 금리차 축소</h2>
     <p>FX는 이 폴더의 자동 macro-regime-detector 대상이 아니므로 종합 점수는 주식용 참고치입니다. 환율에는 달러 사이클·금리차·리스크 선호가 더 직접 영향을 줍니다.</p>
   </div>
